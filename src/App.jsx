@@ -36,20 +36,20 @@ export default function App() {
         <Hero />
 
         {/* Placeholder blocks — removed as real components are wired in */}
+        <div id="about"        className="min-h-screen flex items-center justify-center">
+          <p className="text-slate-600 font-mono text-sm tracking-widest">ABOUT ME — Step 4</p>
+        </div>
         <div id="experience"   className="min-h-screen flex items-center justify-center">
           <p className="text-slate-600 font-mono text-sm tracking-widest">EXPERIENCE — Step 3</p>
         </div>
         <div id="projects"     className="min-h-screen flex items-center justify-center">
           <p className="text-slate-600 font-mono text-sm tracking-widest">PROJECTS — Step 3</p>
         </div>
-        <div id="skills"       className="min-h-screen flex items-center justify-center">
-          <p className="text-slate-600 font-mono text-sm tracking-widest">SKILLS — Step 4</p>
-        </div>
         <div id="achievements" className="min-h-screen flex items-center justify-center">
           <p className="text-slate-600 font-mono text-sm tracking-widest">ACHIEVEMENTS — Step 4</p>
         </div>
         <div id="contact"      className="min-h-screen flex items-center justify-center">
-          <p className="text-slate-600 font-mono text-sm tracking-widest">CONTACT — Step 4</p>
+          <p className="text-slate-600 font-mono text-sm tracking-widest">CONTACT ME — Step 4</p>
         </div>
       </main>
     </div>
