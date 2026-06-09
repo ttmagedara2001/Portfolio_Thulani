@@ -5,11 +5,11 @@ import { profile } from '../data/portfolioData'
 
 const NAV_LINKS = [
   { id: 'hero',         label: 'Home'         },
+  { id: 'about',        label: 'About Me'     },
   { id: 'experience',   label: 'Experience'   },
   { id: 'projects',     label: 'Projects'     },
-  { id: 'skills',       label: 'Skills'       },
   { id: 'achievements', label: 'Achievements' },
-  { id: 'contact',      label: 'Contact'      },
+  { id: 'contact',      label: 'Contact Me'   },
 ]
 
 export default function Navbar() {
