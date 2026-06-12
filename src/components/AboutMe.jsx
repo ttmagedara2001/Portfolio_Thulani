@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Cpu, Globe, Brain, GraduationCap, Network, ShieldCheck } from 'lucide-react'
+import uokLogo from '../assets/uok_logo.png'
+import shcLogo from '../assets/shc_logo.jpg'
 
 // Terminal contents for tech stack sections
 const DIAGNOSTIC_DATA = {
@@ -66,6 +68,8 @@ export default function AboutMe() {
   const [activeTab, setActiveTab] = useState('languages')
   const [typedLogs, setTypedLogs] = useState([])
   const [logIndex, setLogIndex] = useState(0)
+  const [leftTab, setLeftTab] = useState('focus')
+  const [showCoursework, setShowCoursework] = useState(false)
 
   // Terminal Typing Simulation Effect
   useEffect(() => {
@@ -129,14 +133,14 @@ export default function AboutMe() {
       <div className="max-w-7xl mx-auto w-full relative z-10">
         {/* Header HUD Marker */}
         <div className="mb-16 md:mb-20 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs tracking-[0.4em] uppercase">
+          <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-[0.4em] uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            SYSTEMS_COGNITION // 01
+            ABOUT_ME // 01
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight font-sans">
-            Bridging Physical Telemetry, <br />
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans">
+            My Profile & <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500">
-              Digital Space & Human Networks
+              Professional Journey
             </span>
           </h2>
         </div>
@@ -149,94 +153,319 @@ export default function AboutMe() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
         >
-          {/* Left Column: Thematic Narrative Blocks */}
-          <div className="lg:col-span-7 flex flex-col gap-8">
+          {/* Left Column: Interactive Subsystem Diagnostic Selector */}
+          <div className="lg:col-span-7 flex flex-col">
             
-            {/* Block 1: Orbital Trajectory */}
-            <motion.div
-              variants={blockVariants}
-              className="group relative p-6 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-cyan-500/30 transition-all duration-300 backdrop-blur-sm"
-            >
-              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-cyan-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-cyan-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-400 group-hover:scale-125 transition-transform duration-300" />
+            {/* Interactive Left Column Tabs */}
+            <div className="flex border-b border-white/[0.06] mb-8 gap-6 font-mono text-xs md:text-sm select-none overflow-x-auto scrollbar-none">
+              {[
+                { id: 'focus', label: 'TECH_SPECIALTIES', icon: Cpu },
+                { id: 'education', label: 'EDUCATION', icon: GraduationCap },
+                { id: 'leadership', label: 'LEADERSHIP', icon: Network }
+              ].map((tab) => {
+                const Icon = tab.icon
+                const active = leftTab === tab.id
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setLeftTab(tab.id)}
+                    className={`relative pb-3 flex items-center gap-2 tracking-widest whitespace-nowrap transition-colors duration-300 ${
+                      active ? 'text-cyan-400 font-bold' : 'text-slate-500 hover:text-slate-300'
+                    }`}
+                  >
+                    <Icon size={14} />
+                    <span>{tab.label}</span>
+                    {active && (
+                      <motion.div
+                        layoutId="activeLeftTabBorder"
+                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 to-indigo-500"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 shrink-0">
-                  <GraduationCap size={20} />
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono tracking-widest text-cyan-400 uppercase mb-1">
-                    SECTOR_01 // THE ORBITAL TRAJECTORY
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide mb-3">
-                    Academic Foundation & Core Principles
-                  </h3>
-                  <p className="text-sm md:text-base text-slate-400 leading-relaxed font-sans">
-                    Forging a dual-competency trajectory at the convergence of hardware mechanics and software engines. Pursuing a <span className="text-cyan-400 font-semibold">BSc (Hons) in Electronics and Computer Science</span> at the University of Kelaniya, sustaining an excellent <span className="text-indigo-400 font-semibold font-mono">3.63 GPA</span>. Designing enterprise architectures built to process high loads, optimize computational footprints, and translate raw telemetry into actionable intelligence.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            {/* Tab Panels */}
+            <div className="flex-1 min-h-[300px]">
+              <AnimatePresence mode="wait">
+                {leftTab === 'focus' && (
+                  <motion.div
+                    key="focus"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex flex-col gap-6"
+                  >
+                    {/* Card 1: Full-Stack */}
+                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-cyan-500/20 transition-all duration-300">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
+                          Full-Stack Systems
+                        </h3>
+                        <span className="text-xs font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-500/20 px-2 py-0.5 rounded">
+                          ACTIVE
+                        </span>
+                      </div>
+                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                        Architecting high-throughput backend services and responsive, fluid user interfaces.
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['React.js', 'Spring Boot', 'MongoDB', 'Java', 'Tailwind CSS'].map(tag => (
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-            {/* Block 2: Cyber-Physical & Spatial Engine */}
-            <motion.div
-              variants={blockVariants}
-              className="group relative p-6 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-indigo-500/30 transition-all duration-300 backdrop-blur-sm"
-            >
-              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-indigo-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-indigo-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-400 group-hover:scale-125 transition-transform duration-300" />
+                    {/* Card 2: IoT & Cyber-Physical */}
+                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-indigo-500/20 transition-all duration-300">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
+                          IoT & Embedded Systems
+                        </h3>
+                        <span className="text-xs font-mono text-indigo-400 bg-indigo-950/40 border border-indigo-500/20 px-2 py-0.5 rounded">
+                          CYBER-PHYSICAL
+                        </span>
+                      </div>
+                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                        Building real-time telemetry streams and bare-metal firmware with concurrency validation.
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['ESP32', 'MQTT', 'WebSockets', 'Grafana', 'Arduino', 'C/C++'].map(tag => (
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-indigo-950/40 border border-indigo-500/20 text-indigo-400 shrink-0">
-                  <Cpu size={20} />
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono tracking-widest text-indigo-400 uppercase mb-1">
-                    SECTOR_02 // SYSTEM LAYERS & SPATIAL MATRIX
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide mb-3">
-                    Embedded Telemetry & Immersive Execution
-                  </h3>
-                  <p className="text-sm md:text-base text-slate-400 leading-relaxed font-sans">
-                    Constructing low-latency, cyber-physical feedback loops. Specializing in bare-metal concurrency validation on <span className="text-indigo-400 font-semibold">ESP32 microcontrollers</span>, automated <span className="text-cyan-400 font-semibold">GitHub Actions CI/CD pipelines</span>, and real-time WebSocket communication channels. Simultaneously engineering immersive virtual realities via Unity and C#, deploying embedded <span className="text-purple-400 font-semibold font-mono">ONNX/Unity Barracuda ML runtimes</span> for edge-computed 3D historical site reconstructions.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                    {/* Card 3: AI & AR Spatial Computing */}
+                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-purple-500/20 transition-all duration-300">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
+                          AI & Immersive Systems
+                        </h3>
+                        <span className="text-xs font-mono text-purple-400 bg-purple-950/40 border border-purple-500/20 px-2 py-0.5 rounded">
+                          INTELLIGENCE
+                        </span>
+                      </div>
+                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                        Deploying edge intelligence models and building immersive landmark-recognition AR applications.
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Federated Learning', 'Unity & C#', 'Unity Barracuda', 'TensorFlow Lite'].map(tag => (
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
-            {/* Block 3: Distributed Intelligence & Ecosystem Leadership */}
-            <motion.div
-              variants={blockVariants}
-              className="group relative p-6 rounded-2xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-purple-500/30 transition-all duration-300 backdrop-blur-sm"
-            >
-              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-purple-400 group-hover:scale-125 transition-transform duration-300" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-purple-400 group-hover:scale-125 transition-transform duration-300" />
+                {leftTab === 'education' && (
+                  <motion.div
+                    key="education"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex flex-col gap-6"
+                  >
+                    {/* University of Kelaniya Card */}
+                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-[#050212]/80 hover:bg-[#07041a]/95 hover:border-cyan-500/30 transition-all duration-300 backdrop-blur-sm">
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-500/30 group-hover:scale-125 transition-transform duration-300" />
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-500/30 group-hover:scale-125 transition-transform duration-300" />
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-purple-950/40 border border-purple-500/20 text-purple-400 shrink-0">
-                  <Network size={20} />
-                </div>
-                <div>
-                  <div className="text-[11px] font-mono tracking-widest text-purple-400 uppercase mb-1">
-                    SECTOR_03 // DISTRIBUTED NETWORKS & ORG CORE
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide mb-3">
-                    Federated Learning & Collaborative Ecosystems
-                  </h3>
-                  <p className="text-sm md:text-base text-slate-400 leading-relaxed font-sans">
-                    Pioneering privacy-centric intelligence structures. Co-authored international research publications demonstrating <span className="text-purple-400 font-semibold">Federated Learning</span> models to preserve privacy in cyberbullying detection. Fueling human networks as President of the Humane Society, Industry Relations Lead of the Electronics and Computer Science Club, and Secretary for KelaniSTEAM—structuring technical and social ecosystems for industry-scale impact.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                      <div className="flex flex-col sm:flex-row gap-4 items-start">
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-white/[0.08] bg-white flex items-center justify-center p-1.5 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                          <img
+                            src={uokLogo}
+                            alt="University of Kelaniya Logo"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <div className="flex-1 w-full">
+                          <div className="flex flex-wrap justify-between items-start gap-1 mb-1">
+                            <h4 className="text-xs font-mono tracking-widest text-cyan-400 uppercase">
+                              UNIVERSITY OF KELANIYA
+                            </h4>
+                            <span className="text-xs font-mono text-slate-400 bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.05]">
+                              2022 - 2026
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-slate-100 mb-1 leading-snug">
+                            BSc (Hons) in Electronics and Computer Science
+                          </h3>
+                          
+                          <div className="flex items-center gap-3 mb-3 text-sm">
+                            <span className="text-slate-400 font-medium">Undergraduate</span>
+                            <span className="w-1 h-1 rounded-full bg-slate-600" />
+                            <span className="text-emerald-400 font-semibold font-mono">GPA 3.63 / 4.00</span>
+                          </div>
+
+                          <p className="text-sm md:text-base text-slate-400 mb-4 leading-relaxed">
+                            Pursuing rigorous studies at the intersection of embedded hardware logic, software engines, and artificial intelligence models.
+                          </p>
+
+                          {/* Interactive Coursework Toggle */}
+                          <div className="w-full">
+                            <button
+                              onClick={() => setShowCoursework(!showCoursework)}
+                              className="flex items-center gap-2 text-xs md:text-sm font-mono font-semibold text-cyan-400 hover:text-cyan-300 transition-colors py-1 px-3 rounded bg-cyan-950/20 border border-cyan-500/20"
+                            >
+                              <span>{showCoursework ? 'HIDE_COURSEWORK' : 'VIEW_COURSEWORK'}</span>
+                              <span className={`transition-transform duration-300 inline-block text-[10px] ${showCoursework ? 'rotate-180' : ''}`}>
+                                ▼
+                              </span>
+                            </button>
+
+                            <AnimatePresence>
+                              {showCoursework && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="pt-4 flex flex-wrap gap-2">
+                                    {[
+                                      "Software Engineering",
+                                      "Database Management Systems",
+                                      "Machine Learning & AI",
+                                      "IoT & Embedded Systems",
+                                      "Enterprise Java Dev",
+                                      "Data Structures & Algorithms",
+                                      "Object-Oriented Programming",
+                                      "Industrial Electronics",
+                                      "Industrial Automation"
+                                    ].map(course => (
+                                      <span key={course} className="text-xs font-mono text-slate-300 bg-indigo-950/20 border border-indigo-500/20 px-2.5 py-1 rounded-full">
+                                        {course}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Sacred Heart Convent Card */}
+                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-[#050212]/80 hover:bg-[#07041a]/95 hover:border-indigo-500/30 transition-all duration-300 backdrop-blur-sm">
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-500/30 group-hover:scale-125 transition-transform duration-300" />
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-500/30 group-hover:scale-125 transition-transform duration-300" />
+
+                      <div className="flex flex-col sm:flex-row gap-4 items-start">
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-white/[0.08] bg-white flex items-center justify-center p-1 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                          <img
+                            src={shcLogo}
+                            alt="Sacred Heart Convent Logo"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 w-full">
+                          <div className="flex flex-wrap justify-between items-start gap-1 mb-1">
+                            <h4 className="text-xs font-mono tracking-widest text-indigo-400 uppercase">
+                              SACRED HEART CONVENT - GALLE
+                            </h4>
+                            <span className="text-xs font-mono text-slate-400 bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.05]">
+                              Alumna
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-slate-100 mb-1 leading-snug">
+                            Primary & Secondary Education
+                          </h3>
+                          
+                          <p className="text-sm md:text-base text-slate-400 leading-relaxed">
+                            Built a strong analytical foundation in Physical Sciences and Mathematics, while developing active leadership roles in school clubs and activities.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {leftTab === 'leadership' && (
+                  <motion.div
+                    key="leadership"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex flex-col gap-4"
+                  >
+                    {[
+                      {
+                        role: "President",
+                        org: "Humane Society of University of Kelaniya",
+                        period: "2024 - 2025",
+                        color: "border-cyan-500/30",
+                        iconColor: "text-cyan-400",
+                        detail: "Directed organization strategies, managed volunteer teams, and coordinated community animal welfare outreach programs."
+                      },
+                      {
+                        role: "Secretary",
+                        org: "KelaniSTEAM — University of Kelaniya",
+                        period: "2023 - 2024",
+                        color: "border-indigo-500/30",
+                        iconColor: "text-indigo-400",
+                        detail: "Structured project operations, compiled administrative protocols, and organized cross-disciplinary STEM workshops."
+                      },
+                      {
+                        role: "Industry Relations Lead",
+                        org: "Electronics & Computer Science Club, UOK",
+                        period: "2023 - 2024",
+                        color: "border-purple-500/30",
+                        iconColor: "text-purple-400",
+                        detail: "Connected undergraduate talent with industry giants, orchestrated networking summits, and coordinated tech forums."
+                      },
+                      {
+                        role: "Organising Committee VP — Partnerships",
+                        org: "CEO 2.0, AIESEC in UOK",
+                        period: "2023",
+                        color: "border-emerald-500/30",
+                        iconColor: "text-emerald-400",
+                        detail: "Negotiated strategic partnerships, managed brand sponsor pipelines, and facilitated business-to-academic integration."
+                      }
+                    ].map((item, idx) => (
+                      <div
+                        key={item.role + idx}
+                        className={`relative pl-5 border-l-2 ${item.color} py-1 hover:bg-white/[0.01] transition-colors rounded-r-lg pr-3`}
+                      >
+                        <span className={`absolute left-[-5px] top-3.5 w-2.5 h-2.5 rounded-full border border-[#030014] bg-current ${item.iconColor}`} />
+
+                        <div className="flex flex-wrap justify-between items-start gap-1">
+                          <h4 className="text-base font-bold text-slate-100 uppercase tracking-wide">
+                            {item.role}
+                          </h4>
+                          <span className="text-xs font-mono text-slate-500 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.05]">
+                            {item.period}
+                          </span>
+                        </div>
+                        <div className="text-xs font-mono text-indigo-300 mb-1 tracking-wide uppercase">
+                          {item.org}
+                        </div>
+                        <p className="text-sm text-slate-400 leading-relaxed">
+                          {item.detail}
+                        </p>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
           </div>
+
+
 
           {/* Right Column: Minimalist Glassmorphic System Diagnostic Panel */}
           <motion.div
