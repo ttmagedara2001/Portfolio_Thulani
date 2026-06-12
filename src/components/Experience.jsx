@@ -14,8 +14,7 @@ const MISSION_LOG = [
       { category: "Frontend & UI/UX", detail: "Architected responsive telemetry dashboard systems for three flagship applications (Plant, Factory, and Fleet Management) using React.js, Tailwind CSS, and Figma." },
       { category: "Firmware & Concurrency", detail: "Engineered ESP32 firmware for scalability testing and utilized MQTTX to validate core MQTT topic protocols." },
       { category: "Pipelines & Automation", detail: "Established automated CI/CD pipelines using GitHub Actions to streamline software builds, testing, and continuous deployment over Vercel/Cloud gateways." },
-      { category: "AI-Driven Workflow", detail: "Optimized system code logic and archit
-        ecture efficiency using GitHub Copilot and Claude inside Agentic, Planning, and RAG frameworks." }
+      { category: "AI-Driven Workflow", detail: "Optimized system code logic and architecture efficiency using GitHub Copilot and Claude inside Agentic, Planning, and RAG frameworks." }
     ],
     coordinates: "LAT 6.9697° N // LON 79.9149° E",
     color: "from-cyan-400 via-cyan-500 to-indigo-500",
