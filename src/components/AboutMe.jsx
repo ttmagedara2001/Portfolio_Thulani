@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Cpu, Globe, Brain, GraduationCap, Network, ShieldCheck } from 'lucide-react'
 import uokLogo from '../assets/uok_logo.png'
 import shcLogo from '../assets/shc_logo.jpg'
+import profileImage from '../assets/profile/image.jpeg'
 
 // Terminal contents for tech stack sections
 const DIAGNOSTIC_DATA = {
@@ -467,11 +468,50 @@ export default function AboutMe() {
 
 
 
-          {/* Right Column: Minimalist Glassmorphic System Diagnostic Panel */}
+          {/* Right Column: Profile Image + System Diagnostic Panel */}
           <motion.div
             variants={blockVariants}
-            className="lg:col-span-5 flex flex-col"
+            className="lg:col-span-5 flex flex-col gap-5"
           >
+            {/* ── Profile Avatar Card ── */}
+            <div className="group relative w-full rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-md overflow-hidden"
+                 style={{ aspectRatio: '16/9' }}>
+              {/* Corner brackets */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
+
+              {/* Profile photo */}
+              <img
+                src={profileImage}
+                alt="Thulani Magedara"
+                className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700"
+              />
+
+              {/* Gradient veil */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent pointer-events-none z-10" />
+              {/* Scanline */}
+              <div className="absolute inset-0 pointer-events-none opacity-[0.07] z-10"
+                   style={{ background: 'linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 50%)', backgroundSize: '100% 3px' }} />
+              {/* Neon sweep line on hover */}
+              <div className="absolute left-0 right-0 h-[1.5px] bg-cyan-400/40 z-10 pointer-events-none
+                              opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                   style={{ top: '38%' }} />
+
+              {/* HUD labels */}
+              <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 font-mono text-[9px] text-cyan-400/70 tracking-widest">
+                <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+                IDENTITY_CONFIRMED
+              </div>
+              <div className="absolute bottom-3 left-4 z-20">
+                <p className="font-mono text-[9px] text-cyan-400/60 tracking-widest uppercase">OPERATOR //</p>
+                <p className="font-sans text-base font-black text-white tracking-wide">Thulani Magedara</p>
+                <p className="font-mono text-[9px] text-slate-500 tracking-widest uppercase mt-0.5">Applications Engineer · Sri Lanka</p>
+              </div>
+            </div>
+
+            {/* ── Diagnostic Panel ── */}
             <div className="relative flex-1 flex flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-md overflow-hidden p-6">
               
               {/* Decorative Corner Bracket Lines */}
