@@ -3,6 +3,53 @@
 // React components consume this data; nothing is hardcoded in JSX markup.
 // =============================================================================
 
+import sdgSprints from '../assets/sdg_sprints.png'
+import hackxAccolade from '../assets/hackx_accolade.png'
+import coderallyAccolade from '../assets/coderally_accolade.png'
+import leagueLeaders from '../assets/league_leaders.png'
+import federatedLearning from '../assets/federated_learning_pub.png'
+import privacyIccp from '../assets/privacy_iccp_pub.png'
+
+
+// ---------------------------------------------------------------------------
+// ALPHA STARS — Hero Stellar Constellation Map role nodes
+// xPct / yPct are the percentage-based canvas positions (0–1) for each node.
+// ---------------------------------------------------------------------------
+export const alphaStars = [
+  {
+    id: 'fullstack',
+    title: 'Fullstack Developer',
+    tagline: 'Architecting end-to-end digital environments.',
+    stack: 'React.js • Tailwind CSS • Spring Boot • MongoDB • Java',
+    xPct: 0.22,
+    yPct: 0.32,
+  },
+  {
+    id: 'iot',
+    title: 'IoT Developer',
+    tagline: 'Engineering real-time cyber-physical telemetries.',
+    stack: 'ESP32 • MQTT • WebSockets • REST APIs • Grafana',
+    xPct: 0.72,
+    yPct: 0.25,
+  },
+  {
+    id: 'ar',
+    title: 'AR Developer',
+    tagline: 'Constructing immersive, spatial computing experiences.',
+    stack: 'Unity • C# • Unity Barracuda • 3D Reconstruction',
+    xPct: 0.30,
+    yPct: 0.70,
+  },
+  {
+    id: 'ecosystem',
+    title: 'Ecosystem Builder',
+    tagline: 'Aligning technical human networks for global impact.',
+    stack: 'Community Management • Leadership • Volunteering • Project Operations',
+    xPct: 0.75,
+    yPct: 0.68,
+  },
+];
+
 // ---------------------------------------------------------------------------
 // PROFILE
 // ---------------------------------------------------------------------------
@@ -100,87 +147,109 @@ export const experience = [
 export const projects = [
   {
     id: "proj-1",
-    title: "IoT Dashboard Suite",
-    subtitle: "Protonest IoT Pvt. Ltd.",
-    description:
-      "Three mobile-responsive dashboards (Plant, Factory, Fleet) featuring real-time WebSocket telemetry streams, historical trend visualisation, and REST API actuator control — built to accelerate client acquisition.",
-    techStack: [
-      "React.js",
-      "Tailwind CSS",
-      "ESP32",
-      "MQTT",
-      "WebSockets",
-      "REST API",
-      "GitHub Actions",
-      "Postman",
-      "Grafana",
-    ],
+    phase: "PROJECT 01",
+    tagline: "CYBER-PHYSICAL INFRASTRUCTURE",
+    title: "IoT Real-Time Telemetry Fleet Dashboards",
+    subtitle: "Protonest IoT Pvt Ltd",
+    description: "Three mobile-responsive dashboards (Plant, Factory, Fleet) with real-time WebSocket telemetry, historical trends, and REST API actuator control. Powered by automated CI/CD and AI-optimized architecture logic.",
+    techStack: ["React.js", "Tailwind CSS", "ESP32", "MQTT", "WebSockets", "REST", "GitHub Actions", "Grafana"],
+    github: "https://github.com/ttmagedara2001",
     category: "IoT / Full-Stack",
     featured: true,
     icon: "LayoutDashboard",
+    metrics: {
+      complexity: 88,
+      readiness: 95,
+      health: 98,
+      baudRate: 115200,
+      sector: "SEC_01.A",
+      systemLoad: "42%"
+    }
   },
   {
     id: "proj-2",
-    title: "Sigiri Yathra",
-    subtitle: "Augmented Reality for Cultural Heritage",
-    description:
-      "Landmark-recognition AR app that identifies UNESCO-listed historical sites (Lion's Paw, Royal Palace Ruins, etc.) and renders real-time 3D reconstructions with contextual information panels.",
-    techStack: [
-      "Unity",
-      "C#",
-      "ONNX",
-      "Unity Barracuda",
-      "Blender",
-      "Agisoft Metashape",
-    ],
+    phase: "PROJECT 02",
+    tagline: "SPATIAL COMPUTING VECTORS",
+    title: "'Sigiri Yathra' Augmented Reality Portal",
+    subtitle: "Cultural Heritage Reconstruction",
+    description: "Landmark-recognition AR application identifying historical ruins (Lion's Paw Entrance, Royal Palace) to render high-fidelity, real-time 3D reconstructions with on-device ONNX machine learning models.",
+    techStack: ["Unity", "C#", "ONNX", "Unity Barracuda", "Blender", "Agisoft Metashape"],
+    github: "https://github.com/ttmagedara2001",
     category: "AR / ML",
     featured: true,
     icon: "Layers",
+    metrics: {
+      complexity: 92,
+      readiness: 90,
+      health: 94,
+      baudRate: 9600,
+      sector: "SEC_02.B",
+      systemLoad: "78%"
+    }
   },
   {
     id: "proj-3",
-    title: "Bin Matrix",
-    subtitle: "Smart Waste Management System",
-    description:
-      "Automated waste segregation smart bin with connected mobile and web apps. Employs hybrid rule-based logic and embedded TensorFlow Lite ML for on-device classification, with sensor-driven MQTT/HTTP telemetry.",
-    techStack: [
-      "ESP32",
-      "ESP32-CAM",
-      "MQ Gas Sensors",
-      "Moisture Sensors",
-      "TensorFlow Lite",
-      "C++",
-      "Flutter",
-      "React",
-      "MQTT",
-      "HTTP",
-    ],
+    phase: "PROJECT 03",
+    tagline: "EMBEDDED MACHINE LEARNING",
+    title: "Bin Matrix: Smart Composting System",
+    subtitle: "Sensor Fusion & Waste Segregation",
+    description: "Automated waste segregation smart system incorporating sensor fusion models, MQ gas/moisture diagnostics, and TensorFlow Lite edge computing connected to native cloud tracking web apps.",
+    techStack: ["ESP32-CAM", "TensorFlow Lite", "C++", "MQTT", "React", "Flutter", "Hybrid Logic"],
+    github: "https://github.com/ttmagedara2001",
     category: "IoT / ML",
     featured: true,
     icon: "Cpu",
+    metrics: {
+      complexity: 95,
+      readiness: 92,
+      health: 96,
+      baudRate: 115200,
+      sector: "SEC_03.C",
+      systemLoad: "64%"
+    }
   },
   {
     id: "proj-4",
-    title: "Fetch Me Home",
-    subtitle: "Web-based Pet Adoption Platform",
-    description:
-      "End-to-end adoption portal connecting animal shelters with prospective owners. Features filtered pet browsing, shelter admin dashboards, and automated adoption request processing.",
-    techStack: ["React.js", "Spring Boot", "MongoDB", "REST API"],
+    phase: "PROJECT 04",
+    tagline: "FULL-STACK PORTALS",
+    title: "Fetch Me Home Pet Adoption Engine",
+    subtitle: "End-to-End Animal Shelter Portal",
+    description: "Full-stack web platform connecting animal shelters with active communities. Features filtered multi-attribute pet browsing pipelines, secure data schemas, and dedicated administration management dashboards.",
+    techStack: ["React.js", "Spring Boot", "MongoDB", "RESTful APIs"],
+    github: "https://github.com/ttmagedara2001",
     category: "Full-Stack",
     featured: false,
     icon: "Heart",
+    metrics: {
+      complexity: 82,
+      readiness: 98,
+      health: 99,
+      baudRate: 9600,
+      sector: "SEC_04.D",
+      systemLoad: "31%"
+    }
   },
   {
     id: "proj-5",
-    title: "Easy Park",
-    subtitle: "Smart Car Parking System",
-    description:
-      "Real-time sensor-driven parking slot detection prototype with a connected mobile interface for slot reservation. Demonstrates low-latency IoT event handling at the embedded level.",
+    phase: "PROJECT 05",
+    tagline: "EMBEDDED SYSTEMS PROTOCOLS",
+    title: "Easy Park Real-Time Infrastructure",
+    subtitle: "Smart Proximity Sensor Network",
+    description: "Real-time hardware-driven slot detection micro-prototype mapping sensor feedback arrays directly onto consumer client smartphone screens for remote slot reservations.",
     techStack: ["Arduino", "C", "IoT Sensors", "Embedded Systems"],
+    github: "https://github.com/ttmagedara2001",
     category: "IoT / Embedded",
     featured: false,
     icon: "Car",
-  },
+    metrics: {
+      complexity: 78,
+      readiness: 96,
+      health: 97,
+      baudRate: 9600,
+      sector: "SEC_05.E",
+      systemLoad: "18%"
+    }
+  }
 ];
 
 // ---------------------------------------------------------------------------
@@ -269,6 +338,8 @@ export const publications = [
     venueFull: "5th Global Conference on Children and Youth, Oxford, UK",
     date: "March 2025",
     tags: ["Federated Learning", "Privacy-Preserving ML", "Cyber Safety"],
+    telemetry: "Proposed cutting-edge decentralized machine learning models to identify cyberbullying patterns while rigidly safeguarding child data privacy at the edge.",
+    image: federatedLearning
   },
   {
     id: "pub-2",
@@ -280,6 +351,8 @@ export const publications = [
       "International Conference on Child Protection (ICCP) 2025, University of Kelaniya",
     date: "August 2025",
     tags: ["Federated Learning", "Child Protection", "NLP"],
+    telemetry: "Engineered technical privacy-preserving model risk mitigation strategies complying with strict international sensitive data protection standards.",
+    image: privacyIccp
   },
 ];
 
@@ -294,6 +367,8 @@ export const awards = [
     year: "2026",
     icon: "Trophy",
     tier: "gold",
+    telemetry: "Secured top rank by engineering high-impact digital workflows directly mapped to United Nations Sustainable Development Goals.",
+    image: sdgSprints
   },
   {
     id: "award-2",
@@ -302,6 +377,8 @@ export const awards = [
     year: "2025",
     icon: "Medal",
     tier: "silver",
+    telemetry: "Built and pitched a high-fidelity technology prototype under intense, time-constrained hackathon development conditions.",
+    image: hackxAccolade
   },
   {
     id: "award-3",
@@ -310,6 +387,8 @@ export const awards = [
     year: "2023",
     icon: "Award",
     tier: "bronze",
+    telemetry: "Advanced to the final stage of a highly competitive, algorithmic speed-coding sprint ecosystem.",
+    image: coderallyAccolade
   },
   {
     id: "award-4",
@@ -318,6 +397,8 @@ export const awards = [
     year: "2023",
     icon: "Star",
     tier: "bronze",
+    telemetry: "Evaluated and selected among elite student teams for strategic project resolution and operations layout.",
+    image: leagueLeaders
   },
 ];
 
