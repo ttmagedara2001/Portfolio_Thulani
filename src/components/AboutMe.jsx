@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Terminal, Cpu, Globe, Brain, GraduationCap, Network, ShieldCheck } from 'lucide-react'
 import uokLogo from '../assets/uok_logo.png'
 import shcLogo from '../assets/shc_logo.jpg'
-import profileImage from '../assets/profile/image.jpeg'
 
 // Terminal contents for tech stack sections
 const DIAGNOSTIC_DATA = {
@@ -138,8 +137,8 @@ export default function AboutMe() {
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
             ABOUT_ME // 01
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans">
-            My Profile & <br />
+          <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight font-sans">
+            My Profile &amp; 
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500">
               Professional Journey
             </span>
@@ -203,14 +202,14 @@ export default function AboutMe() {
                     {/* Card 1: Full-Stack */}
                     <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-cyan-500/20 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
+                      <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
                           Full-Stack Systems
                         </h3>
                         <span className="text-xs font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-500/20 px-2 py-0.5 rounded">
                           ACTIVE
                         </span>
                       </div>
-                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                      <p className="text-sm text-slate-400 mb-3 leading-relaxed">
                         Architecting high-throughput backend services and responsive, fluid user interfaces.
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -225,14 +224,14 @@ export default function AboutMe() {
                     {/* Card 2: IoT & Cyber-Physical */}
                     <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-indigo-500/20 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
-                          IoT & Embedded Systems
+                        <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
+                          IoT &amp; Embedded Systems
                         </h3>
                         <span className="text-xs font-mono text-indigo-400 bg-indigo-950/40 border border-indigo-500/20 px-2 py-0.5 rounded">
                           CYBER-PHYSICAL
                         </span>
                       </div>
-                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                      <p className="text-sm text-slate-400 mb-3 leading-relaxed">
                         Building real-time telemetry streams and bare-metal firmware with concurrency validation.
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -247,14 +246,14 @@ export default function AboutMe() {
                     {/* Card 3: AI & AR Spatial Computing */}
                     <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-purple-500/20 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wide">
-                          AI & Immersive Systems
+                        <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
+                          AI &amp; Immersive Systems
                         </h3>
                         <span className="text-xs font-mono text-purple-400 bg-purple-950/40 border border-purple-500/20 px-2 py-0.5 rounded">
                           INTELLIGENCE
                         </span>
                       </div>
-                      <p className="text-sm md:text-base text-slate-400 mb-3 leading-relaxed">
+                      <p className="text-sm text-slate-400 mb-3 leading-relaxed">
                         Deploying edge intelligence models and building immersive landmark-recognition AR applications.
                       </p>
                       <div className="flex flex-wrap gap-1.5">
@@ -299,17 +298,17 @@ export default function AboutMe() {
                               2022 - 2026
                             </span>
                           </div>
-                          <h3 className="text-lg font-bold text-slate-100 mb-1 leading-snug">
+                          <h3 className="text-base font-bold text-slate-100 mb-1 leading-snug">
                             BSc (Hons) in Electronics and Computer Science
                           </h3>
                           
                           <div className="flex items-center gap-3 mb-3 text-sm">
                             <span className="text-slate-400 font-medium">Undergraduate</span>
                             <span className="w-1 h-1 rounded-full bg-slate-600" />
-                            <span className="text-emerald-400 font-semibold font-mono">GPA 3.63 / 4.00</span>
+                            <span className="text-emerald-400 font-semibold font-mono">GPA 3.55 / 4.00</span>
                           </div>
 
-                          <p className="text-sm md:text-base text-slate-400 mb-4 leading-relaxed">
+                          <p className="text-sm text-slate-400 mb-4 leading-relaxed">
                             Pursuing rigorous studies at the intersection of embedded hardware logic, software engines, and artificial intelligence models.
                           </p>
 
@@ -381,11 +380,11 @@ export default function AboutMe() {
                               Alumna
                             </span>
                           </div>
-                          <h3 className="text-lg font-bold text-slate-100 mb-1 leading-snug">
-                            Primary & Secondary Education
+                          <h3 className="text-base font-bold text-slate-100 mb-1 leading-snug">
+                            Primary &amp; Secondary Education
                           </h3>
                           
-                          <p className="text-sm md:text-base text-slate-400 leading-relaxed">
+                          <p className="text-sm text-slate-400 leading-relaxed">
                             Built a strong analytical foundation in Physical Sciences and Mathematics, while developing active leadership roles in school clubs and activities.
                           </p>
                         </div>
@@ -444,7 +443,7 @@ export default function AboutMe() {
                         <span className={`absolute left-[-5px] top-3.5 w-2.5 h-2.5 rounded-full border border-[#030014] bg-current ${item.iconColor}`} />
 
                         <div className="flex flex-wrap justify-between items-start gap-1">
-                          <h4 className="text-base font-bold text-slate-100 uppercase tracking-wide">
+                          <h4 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
                             {item.role}
                           </h4>
                           <span className="text-xs font-mono text-slate-500 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.05]">
@@ -468,58 +467,20 @@ export default function AboutMe() {
 
 
 
-          {/* Right Column: Profile Image + System Diagnostic Panel */}
+          {/* Right Column: System Diagnostic Panel */}
           <motion.div
             variants={blockVariants}
             className="lg:col-span-5 flex flex-col gap-5"
           >
-            {/* ── Profile Avatar Card ── */}
-            <div className="group relative w-full rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-md overflow-hidden"
-                 style={{ aspectRatio: '16/9' }}>
-              {/* Corner brackets */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400/70 transition-colors duration-300 z-20" />
-
-              {/* Profile photo */}
-              <img
-                src={profileImage}
-                alt="Thulani Magedara"
-                className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700"
-              />
-
-              {/* Gradient veil */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent pointer-events-none z-10" />
-              {/* Scanline */}
-              <div className="absolute inset-0 pointer-events-none opacity-[0.07] z-10"
-                   style={{ background: 'linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 50%)', backgroundSize: '100% 3px' }} />
-              {/* Neon sweep line on hover */}
-              <div className="absolute left-0 right-0 h-[1.5px] bg-cyan-400/40 z-10 pointer-events-none
-                              opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                   style={{ top: '38%' }} />
-
-              {/* HUD labels */}
-              <div className="absolute top-3 left-4 z-20 flex items-center gap-1.5 font-mono text-[9px] text-cyan-400/70 tracking-widest">
-                <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
-                IDENTITY_CONFIRMED
-              </div>
-              <div className="absolute bottom-3 left-4 z-20">
-                <p className="font-mono text-[9px] text-cyan-400/60 tracking-widest uppercase">OPERATOR //</p>
-                <p className="font-sans text-base font-black text-white tracking-wide">Thulani Magedara</p>
-                <p className="font-mono text-[9px] text-slate-500 tracking-widest uppercase mt-0.5">Applications Engineer · Sri Lanka</p>
-              </div>
-            </div>
-
             {/* ── Diagnostic Panel ── */}
             <div className="relative flex-1 flex flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-md overflow-hidden p-6">
-              
+
               {/* Decorative Corner Bracket Lines */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-indigo-500/40" />
               <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-indigo-500/40" />
               <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-indigo-500/40" />
               <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-indigo-500/40" />
-              
+
               {/* HUD Header */}
               <div className="flex justify-between items-center border-b border-white/[0.06] pb-4 mb-4 select-none font-mono text-[10px] tracking-wider text-slate-500">
                 <div className="flex items-center gap-2">
@@ -532,28 +493,31 @@ export default function AboutMe() {
                 </div>
               </div>
 
-              {/* Vector Grid Radar Scope details in mini scale */}
-              <div className="relative h-20 border border-white/[0.05] rounded-lg bg-[#020008]/60 mb-6 overflow-hidden flex items-center justify-between px-4 font-mono select-none pointer-events-none">
-                <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_40%,rgba(3,0,20,0.8)]" />
-                <div className="flex flex-col gap-0.5 z-10">
-                  <span className="text-[9px] text-cyan-400/80">LATITUDE: 6.9697° N</span>
-                  <span className="text-[9px] text-cyan-400/80">LONGITUDE: 79.9149° E</span>
-                  <span className="text-[9px] text-indigo-400/70">ACADEMIC_GRID: UOK_CORE</span>
-                </div>
-                <div className="flex flex-col items-end gap-0.5 z-10 text-right">
-                  <span className="text-[9px] text-emerald-400/80">TEL_SIGNAL: SECURE</span>
-                  <span className="text-[9px] text-slate-500">SYS_TEMP: 38.6°C</span>
-                  <span className="text-[9px] text-slate-500">CPU_LOAD: 2.4%</span>
-                </div>
+              {/* Stat Chips Row */}
+              <div className="grid grid-cols-3 gap-2 mb-6">
+                {[
+                  { label: 'GPA', value: '3.55', sub: 'LEVEL_3', color: 'border-amber-500/25 bg-amber-950/10 text-amber-400' },
+                  { label: 'YEARS', value: '3+', sub: 'CS_STUDY', color: 'border-cyan-500/25 bg-cyan-950/10 text-cyan-400' },
+                  { label: 'PUBS', value: '02', sub: 'RESEARCH', color: 'border-indigo-500/25 bg-indigo-950/10 text-indigo-400' },
+                ].map(chip => (
+                  <div key={chip.label}
+                       className={`flex flex-col items-center justify-center gap-0.5 p-3 rounded-xl border ${chip.color} backdrop-blur-sm`}>
+                    <span className={`text-xl font-black ${chip.color.split(' ').find(c => c.startsWith('text-'))}`}>
+                      {chip.value}
+                    </span>
+                    <span className="font-mono text-[7px] text-slate-500 tracking-widest uppercase">{chip.sub}</span>
+                    <span className="font-mono text-[8px] text-slate-400 tracking-widest uppercase">{chip.label}</span>
+                  </div>
+                ))}
               </div>
 
               {/* Subsystem Select Tabs */}
-              <div className="grid grid-cols-2 gap-2 mb-6 select-none font-mono">
+              <div className="grid grid-cols-2 gap-2 mb-4 select-none font-mono">
                 {[
-                  { id: 'languages', label: 'LANGUAGES', icon: Brain },
-                  { id: 'web_cloud', label: 'CLOUD & WEB', icon: Globe },
-                  { id: 'iot_hardware', label: 'IOT & HW', icon: Cpu },
-                  { id: 'ai_data', label: 'AI & DATA', icon: ShieldCheck }
+                  { id: 'languages',   label: 'LANGUAGES', icon: Brain },
+                  { id: 'web_cloud',   label: 'CLOUD & WEB', icon: Globe },
+                  { id: 'iot_hardware',label: 'IOT & HW', icon: Cpu },
+                  { id: 'ai_data',     label: 'AI & DATA', icon: ShieldCheck }
                 ].map(tab => {
                   const Icon = tab.icon
                   const active = activeTab === tab.id
@@ -582,7 +546,7 @@ export default function AboutMe() {
                     STATUS_{DIAGNOSTIC_DATA[activeTab].status}
                   </span>
                 </div>
-                
+
                 <div className="space-y-1.5 min-h-[160px]">
                   <AnimatePresence mode="popLayout">
                     {typedLogs.map((log, index) => {
@@ -595,11 +559,9 @@ export default function AboutMe() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.15 }}
                           className={`${
-                            isHeading
-                              ? 'text-cyan-400 font-bold'
-                              : isIndent
-                              ? 'text-slate-300 pl-2'
-                              : 'text-slate-400'
+                            isHeading ? 'text-cyan-400 font-bold'
+                            : isIndent ? 'text-slate-300 pl-2'
+                            : 'text-slate-400'
                           }`}
                         >
                           {isIndent ? (
@@ -617,8 +579,7 @@ export default function AboutMe() {
                       )
                     })}
                   </AnimatePresence>
-                  
-                  {/* Cursor Telemetry blinker */}
+
                   {logIndex < DIAGNOSTIC_DATA[activeTab].logs.length ? (
                     <div className="text-cyan-400 animate-pulse flex items-center gap-1 select-none pl-4">
                       <span className="w-1.5 h-3 bg-cyan-400 animate-[blink_0.8s_infinite]" />
