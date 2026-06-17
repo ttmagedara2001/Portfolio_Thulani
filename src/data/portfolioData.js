@@ -74,7 +74,7 @@ export const education = [
     id: "edu-1",
     degree: "BSc (Hons) in Electronics and Computer Science",
     institution: "University of Kelaniya",
-    gpa: "3.63 / 4.00",
+    gpa: "3.55 / 4.00",
     graduationYear: "2026",
     status: "Undergraduate",
     coursework: [

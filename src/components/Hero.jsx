@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { Download, ChevronDown } from 'lucide-react'
 import { profile, alphaStars } from '../data/portfolioData'
 import RadarTerminal from './RadarTerminal'
+import cvFile from '../assets/CV/Thulani Magedara CV.pdf'
 
 // ── GlitchText Component for Digital Matrix Decrypt Effect ────────────────
 const GLITCH_CHARS = '01$#@%&?_+=*^[]<>█▓▒░▖▗▘▙▚▛▜▝▞▟'
@@ -137,7 +138,7 @@ function RadarTarget({ id, title, stack, activeQuadrant, positionClass }) {
         <div className={`mt-2 pt-2 border-t border-dashed border-indigo-950/20 text-[11px] md:text-xs leading-relaxed transition-all duration-500 ${
           isHot ? 'opacity-100 max-h-24' : 'opacity-40 max-h-0 overflow-hidden'
         }`}>
-          <span className={`${colors.accentHot} font-semibold`}>STACK: </span>
+          <span className={`${isHot ? colors.accentHot : 'text-indigo-400/40'} font-semibold`}>STACK: </span>
           <GlitchText text={stack} isActive={isHot} />
         </div>
       </div>
@@ -263,7 +264,7 @@ export default function Hero() {
 
       {/* ── Full-section subtle vignette overlay ── */}
       <div
-        className="absolute inset-0 pointer-events-none z-1"
+        className="absolute inset-0 pointer-events-none z-[1]"
         style={{
           background: 'radial-gradient(circle at 50% 50%, rgba(2,0,10,0.2) 0%, rgba(2,0,10,0.85) 90%)',
         }}
@@ -344,7 +345,7 @@ export default function Hero() {
       {/* ── CTA buttons (Download CV & View Projects positioned below the radar terminal) ── */}
       <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-4 pointer-events-auto">
         <a
-          href="/cv.pdf"
+          href={cvFile}
           download="Thulani_Magedara_CV.pdf"
           id="hero-cta-cv"
           className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
