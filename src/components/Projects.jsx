@@ -74,7 +74,7 @@ function CircularGauge({ value, label, color }) {
   const circumference = 2 * Math.PI * radius
   
   return (
-    <div className="flex flex-col items-center gap-2 bg-slate-950/60 border border-white/[0.04] p-3 rounded-xl relative overflow-hidden group/gauge w-full">
+    <div className="flex flex-col items-center gap-2 bg-slate-950/30 backdrop-blur-sm border border-indigo-500/10 p-3 rounded-xl relative overflow-hidden group/gauge w-full">
       {/* Tiny corner ticks for visual style */}
       <div className="absolute top-1 left-1 w-1.5 h-1.5 border-t border-l border-white/20" />
       <div className="absolute top-1 right-1 w-1.5 h-1.5 border-t border-r border-white/20" />
@@ -154,7 +154,7 @@ function CustomConsoleLogs({ active }) {
   }, [active])
 
   return (
-    <div className="bg-[#020008] border border-white/[0.04] p-3.5 rounded-xl font-mono text-[9px] text-emerald-400/80 leading-relaxed shadow-inner overflow-hidden min-h-[140px] relative">
+    <div className="bg-slate-950/30 backdrop-blur-sm border border-indigo-500/10 p-3.5 rounded-xl font-mono text-[9px] text-cyan-400/80 leading-relaxed shadow-inner overflow-hidden min-h-[140px] relative">
       <div className="flex items-center justify-between border-b border-white/[0.04] pb-2 mb-2 text-slate-500 text-[8px] uppercase select-none">
         <span>CONSOLE_LOGS</span>
         <span className="animate-pulse flex items-center gap-1 text-[7px] text-emerald-500">
@@ -233,7 +233,7 @@ function ProjectCard({ proj, idx, onMouseEnter, onMouseLeave, hoveredCardIndex, 
       onMouseEnter={onMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      className="group relative w-[300px] md:w-[420px] shrink-0 snap-center rounded-2xl border border-indigo-500/10 bg-slate-950/35 hover:bg-slate-950/55 transition-[background-color] duration-300 p-6 md:p-8 backdrop-blur-md overflow-hidden flex flex-col justify-between cursor-pointer"
+      className="group relative w-[300px] md:w-[420px] shrink-0 snap-center rounded-2xl border border-indigo-500/15 bg-slate-950/20 hover:bg-slate-950/35 transition-[background-color] duration-300 p-6 md:p-8 backdrop-blur-lg overflow-hidden flex flex-col justify-between cursor-pointer"
     >
       {/* Laser Tracer Neon Border Overlay */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none rounded-2xl overflow-hidden z-[25]" xmlns="http://www.w3.org/2000/svg">
@@ -372,7 +372,7 @@ function ProjectDetailModal({ project, onClose }) {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.92, y: 30, opacity: 0 }}
         transition={{ type: "spring", damping: 24, stiffness: 180 }}
-        className="relative w-full max-w-4xl bg-[#040114]/95 border border-cyan-500/25 shadow-[0_0_55px_rgba(6,182,212,0.18)] rounded-2xl p-6 md:p-10 backdrop-blur-xl overflow-hidden flex flex-col justify-between z-10"
+        className="relative w-full max-w-4xl bg-slate-950/85 border border-cyan-500/25 shadow-[0_0_55px_rgba(6,182,212,0.15)] rounded-2xl p-6 md:p-10 backdrop-blur-xl overflow-hidden flex flex-col justify-between z-10"
       >
         {/* Tactical Corner Brackets */}
         <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-cyan-400/50" />
@@ -427,7 +427,7 @@ function ProjectDetailModal({ project, onClose }) {
             </div>
 
             {/* Tactical System Info */}
-            <div className="bg-slate-950/50 border border-white/[0.03] p-4 rounded-xl font-mono text-[10px] text-slate-400 flex flex-col gap-2 relative">
+            <div className="bg-slate-950/30 backdrop-blur-sm border border-white/[0.04] p-4 rounded-xl font-mono text-[10px] text-slate-400 flex flex-col gap-2 relative">
               <div className="absolute top-0 right-3 px-2 py-0.5 translate-y-[-50%] bg-[#040114] border border-white/[0.05] rounded text-[8px] text-slate-500 uppercase tracking-widest">
                 SYSTEM_SPECS
               </div>
@@ -544,20 +544,15 @@ export default function Projects() {
       id="projects"
       className="relative w-full py-24 md:py-32 px-6 lg:px-12 flex flex-col justify-center overflow-hidden border-t border-white/[0.04]"
       style={{
-        background: 'linear-gradient(180deg, #020009 0%, #030014 50%, #02000a 100%)'
+        background: 'transparent'
       }}
     >
-      {/* Decorative tactical coordinate overlay */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-20" aria-hidden="true">
-        <svg className="absolute w-full h-full text-cyan-500/[0.04]" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="projects-grid" width="80" height="80" patternUnits="userSpaceOnUse">
-              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#projects-grid)" />
-        </svg>
-      </div>
+      {/* Subtle section veil */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'linear-gradient(180deg, rgba(3,0,20,0.7) 0%, rgba(3,0,20,0.65) 50%, rgba(3,0,20,0.7) 100%)' }}
+        aria-hidden="true"
+      />
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         

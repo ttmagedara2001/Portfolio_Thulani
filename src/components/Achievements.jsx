@@ -30,6 +30,21 @@ const CELESTIAL_HONORS = [
   {
     id: 'accolade-01',
     seq: '01',
+    title: "Dean's List — Level 3",
+    authority: 'Faculty of Science, University of Kelaniya',
+    timeline: '2025',
+    tier: 'gold',
+    icon: 'GraduationCap',
+    telemetry: "Recognised with Academic Excellence on the Dean's List for outstanding GPA performance at undergraduate Level 3.",
+    images: [],
+    assetPdf: deansListPdf,
+    assetLabel: 'VIEW_VERIFICATION',
+    assetAction: 'view',
+    tags: ['Academic Excellence', 'GPA 3.77', 'UOK'],
+  },
+  {
+    id: 'accolade-02',
+    seq: '02',
     title: 'Winner — SDG Sprints Challenge',
     authority: 'IEEE Sri Lanka Section SIGHT',
     timeline: '2026',
@@ -43,8 +58,8 @@ const CELESTIAL_HONORS = [
     tags: ['IEEE', 'SDGs', 'Digital Innovation'],
   },
   {
-    id: 'accolade-02',
-    seq: '02',
+    id: 'accolade-03',
+    seq: '03',
     title: '1st Runners Up — HackX 10.0',
     authority: 'Dept. of Industrial Management, UOK',
     timeline: '2025',
@@ -56,8 +71,8 @@ const CELESTIAL_HONORS = [
     tags: ['Hackathon', 'Prototype', 'UOK'],
   },
   {
-    id: 'accolade-03',
-    seq: '03',
+    id: 'accolade-04',
+    seq: '04',
     title: 'Finalist — CodeRally 4.0',
     authority: 'IEEE Student Branch, IIT',
     timeline: '2023',
@@ -69,8 +84,8 @@ const CELESTIAL_HONORS = [
     tags: ['IEEE', 'Competitive Coding', 'Algorithm'],
   },
   {
-    id: 'accolade-04',
-    seq: '04',
+    id: 'accolade-05',
+    seq: '05',
     title: "Finalist — League of Leaders '23",
     authority: 'Commerce Club, UOK',
     timeline: '2023',
@@ -80,21 +95,6 @@ const CELESTIAL_HONORS = [
     images: [leagueImg],
     assetPdf: null,
     tags: ['Leadership', 'Strategy', 'Commerce Club'],
-  },
-  {
-    id: 'accolade-05',
-    seq: '05',
-    title: "Dean's List — Level 3",
-    authority: 'Faculty of Science, University of Kelaniya',
-    timeline: '2025',
-    tier: 'gold',
-    icon: 'GraduationCap',
-    telemetry: "Recognised with Academic Excellence on the Dean's List for outstanding GPA performance at undergraduate Level 3.",
-    images: [],
-    assetPdf: deansListPdf,
-    assetLabel: 'DOWNLOAD_DECK',
-    assetAction: 'download',
-    tags: ['Academic Excellence', 'GPA 3.55', 'UOK'],
   },
 ]
 
@@ -159,6 +159,7 @@ function AutoGallery({ images, alt, autoPlay = true }) {
   const [idx, setIdx]         = useState(0)
   const [paused, setPaused]   = useState(false)
   const intervalRef           = useRef(null)
+  const touchStartX           = useRef(null)
   const total                 = images.length
 
   // Auto-advance every 3s
@@ -183,6 +184,17 @@ function AutoGallery({ images, alt, autoPlay = true }) {
   const prev = () => { setIdx(i => (i - 1 + total) % total); setPaused(true) }
   const next = () => { setIdx(i => (i + 1) % total);         setPaused(true) }
 
+  // Touch swipe handlers
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+  const onTouchEnd   = (e) => {
+    if (touchStartX.current === null) return
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 40) {
+      diff > 0 ? next() : prev()
+    }
+    touchStartX.current = null
+  }
+
   if (total === 0) return (
     <div className="w-full aspect-[16/9] rounded-2xl border border-amber-500/15 bg-amber-950/10 flex flex-col items-center justify-center gap-3">
       <GraduationCap size={48} className="text-amber-400 drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]" />
@@ -195,6 +207,8 @@ function AutoGallery({ images, alt, autoPlay = true }) {
       className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] bg-[#02000c]/80 select-none"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       {/* Main image — fixed aspect ratio */}
       <div className="relative" style={{ paddingBottom: '56%' }}>
@@ -291,7 +305,7 @@ function AutoGallery({ images, alt, autoPlay = true }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  LARGE SLIDE PANEL — slides in from the right, full height
+//  COMPACT SLIDE PANEL — centered modal, smaller than screen
 // ═══════════════════════════════════════════════════════════════════════════
 function SlidePanel({ onClose, children }) {
   // Close on Escape
@@ -307,16 +321,16 @@ function SlidePanel({ onClose, children }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-[120] flex items-stretch justify-end bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-[120] flex items-center justify-center p-4 md:p-8 bg-black/70 backdrop-blur-sm"
     >
       <motion.div
-        initial={{ x: '100%', opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: '100%', opacity: 0 }}
-        transition={{ type: 'spring', damping: 30, stiffness: 220 }}
+        initial={{ y: 40, opacity: 0, scale: 0.97 }}
+        animate={{ y: 0,  opacity: 1, scale: 1    }}
+        exit={{    y: 40, opacity: 0, scale: 0.97 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 240 }}
         onClick={e => e.stopPropagation()}
-        className="relative w-full max-w-3xl h-full bg-[#040114]/98 border-l border-cyan-500/20
-                   shadow-[-20px_0_60px_rgba(6,182,212,0.12)] overflow-y-auto flex flex-col"
+        className="relative w-full max-w-xl max-h-[82vh] bg-slate-950/95 border border-indigo-500/25
+                   shadow-[0_0_60px_rgba(99,102,241,0.18)] rounded-2xl overflow-y-auto flex flex-col backdrop-blur-xl"
       >
         {/* Top neon accent line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent pointer-events-none z-10" />
@@ -370,7 +384,7 @@ function HonorPanelContent({ item }) {
 
       {/* Telemetry body */}
       <div className="px-8 pb-6">
-        <div className="border border-white/[0.05] bg-slate-950/50 rounded-2xl p-5 mb-5">
+        <div className="border border-indigo-500/15 bg-slate-950/30 backdrop-blur-sm rounded-2xl p-5 mb-5">
           <div className="font-mono text-[9px] text-cyan-400/60 tracking-widest uppercase mb-3">
             &gt; MISSION_TELEMETRY
           </div>
@@ -395,7 +409,7 @@ function HonorPanelContent({ item }) {
                           border-cyan-500/35 text-cyan-400 bg-cyan-950/15 hover:bg-cyan-950/30
                           hover:border-cyan-400/55 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]
                           font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
-              <Eye size={15} />[ VIEW_VERIFICATION ]
+              <Eye size={15} />✦ VIEW_VERIFICATION
             </a>
           )}
           {item.assetPdf && item.assetAction === 'download' && (
@@ -404,7 +418,7 @@ function HonorPanelContent({ item }) {
                           border-amber-500/35 text-amber-400 bg-amber-950/15 hover:bg-amber-950/28
                           hover:border-amber-400/55 hover:shadow-[0_0_20px_rgba(251,191,36,0.22)]
                           font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
-              <Download size={15} />[ DOWNLOAD_DECK ]
+              <Download size={15} />✦ DOWNLOAD_DECK
             </a>
           )}
         </div>
@@ -438,7 +452,7 @@ function PubPanelContent({ item }) {
 
       {/* Telemetry */}
       <div className="px-8 pb-6">
-        <div className="border border-white/[0.05] bg-slate-950/50 rounded-2xl p-5 mb-5">
+        <div className="border border-indigo-500/15 bg-slate-950/30 backdrop-blur-sm rounded-2xl p-5 mb-5">
           <div className="font-mono text-[9px] text-indigo-400/60 tracking-widest uppercase mb-3">
             &gt; RESEARCH_ABSTRACT
           </div>
@@ -462,9 +476,110 @@ function PubPanelContent({ item }) {
                         border-indigo-500/35 text-indigo-400 bg-indigo-950/15 hover:bg-indigo-950/28
                         hover:border-indigo-400/55 hover:shadow-[0_0_20px_rgba(99,102,241,0.25)]
                         font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
-            <ExternalLink size={15} />[ ACCESS_ABSTRACT ]
+            <ExternalLink size={15} />✦ ACCESS_ABSTRACT
           </a>
         )}
+      </div>
+    </div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  HONOR CAROUSEL — horizontal scroll-snap with arrows + dot pager
+// ═══════════════════════════════════════════════════════════════════════════
+function HonorCarousel({ onSelect }) {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const scrollRef   = useRef(null)
+  const touchStartX = useRef(null)
+  const total       = CELESTIAL_HONORS.length
+
+  const scrollTo = (idx) => {
+    const clamped = Math.min(Math.max(idx, 0), total - 1)
+    setActiveIdx(clamped)
+    const el = scrollRef.current
+    if (!el) return
+    const card = el.children[clamped]
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }
+
+  const prev = () => scrollTo(activeIdx - 1)
+  const next = () => scrollTo(activeIdx + 1)
+
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+  const onTouchEnd   = (e) => {
+    if (touchStartX.current === null) return
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
+    touchStartX.current = null
+  }
+
+  const onScroll = () => {
+    const el = scrollRef.current
+    if (!el) return
+    const cardW = el.children[0]?.offsetWidth ?? 360
+    const idx = Math.round(el.scrollLeft / (cardW + 24))
+    setActiveIdx(Math.min(Math.max(idx, 0), total - 1))
+  }
+
+  return (
+    <div className="relative">
+      {/* Prev arrow */}
+      <button
+        onClick={prev}
+        disabled={activeIdx === 0}
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-20
+                   w-10 h-10 rounded-full bg-slate-950/80 border border-white/10
+                   items-center justify-center backdrop-blur-sm
+                   hover:border-cyan-400/50 hover:shadow-[0_0_14px_rgba(34,211,238,0.25)]
+                   disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200
+                   cursor-pointer hidden md:flex"
+      >
+        <ChevronLeft size={18} className="text-white" />
+      </button>
+
+      {/* Scroll track */}
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="flex gap-6 overflow-x-auto pb-4
+                   snap-x snap-mandatory scroll-smooth
+                   [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      >
+        {CELESTIAL_HONORS.map((item) => (
+          <div key={item.id} className="snap-center shrink-0">
+            <HonorCard item={item} onClick={() => onSelect(item)} />
+          </div>
+        ))}
+      </div>
+
+      {/* Next arrow */}
+      <button
+        onClick={next}
+        disabled={activeIdx === total - 1}
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-20
+                   w-10 h-10 rounded-full bg-slate-950/80 border border-white/10
+                   items-center justify-center backdrop-blur-sm
+                   hover:border-cyan-400/50 hover:shadow-[0_0_14px_rgba(34,211,238,0.25)]
+                   disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200
+                   cursor-pointer hidden md:flex"
+      >
+        <ChevronRight size={18} className="text-white" />
+      </button>
+
+      {/* Dot pagination */}
+      <div className="flex items-center justify-center gap-2 mt-5">
+        {CELESTIAL_HONORS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => scrollTo(i)}
+            className={`rounded-full transition-all duration-300 cursor-pointer
+              ${i === activeIdx
+                ? 'w-6 h-2 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]'
+                : 'w-2 h-2 bg-slate-600 hover:bg-slate-400'}`}
+          />
+        ))}
       </div>
     </div>
   )
@@ -483,12 +598,12 @@ function HonorCard({ item, onClick }) {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -8, borderColor: t.hoverBorder, boxShadow: t.glow }}
+      whileHover={{ y: -6, borderColor: t.hoverBorder, boxShadow: t.glow }}
       transition={{ type: 'spring', stiffness: 100, damping: 18 }}
       onClick={onClick}
-      className="group relative rounded-2xl border border-white/[0.07] bg-slate-950/60
+      className="group relative shrink-0 w-[300px] md:w-[360px] rounded-2xl border border-white/[0.07] bg-slate-950/20
                  backdrop-blur-md overflow-hidden flex flex-col p-6 gap-5 cursor-pointer
-                 hover:bg-slate-950/75 transition-[background-color] duration-300 min-h-[280px]"
+                 hover:bg-slate-950/35 transition-[background-color] duration-300 min-h-[300px]"
     >
       {/* Animated corner brackets */}
       <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white/[0.08]
@@ -586,9 +701,9 @@ function PublicationCard({ item, onClick }) {
       whileHover={{ y: -8, borderColor: 'rgba(99,102,241,0.5)', boxShadow: '0 20px 40px -12px rgba(99,102,241,0.25)' }}
       transition={{ type: 'spring', stiffness: 100, damping: 18 }}
       onClick={onClick}
-      className="group relative rounded-2xl border border-white/[0.07] bg-slate-950/60
+      className="group relative rounded-2xl border border-white/[0.07] bg-slate-950/20
                  backdrop-blur-md overflow-hidden flex flex-col p-6 gap-5 cursor-pointer
-                 hover:bg-slate-950/75 transition-[background-color] duration-300 min-h-[280px]"
+                 hover:bg-slate-950/35 transition-[background-color] duration-300 min-h-[280px]"
     >
       {/* Corner brackets */}
       <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white/[0.08]
@@ -685,7 +800,7 @@ export default function Achievements() {
     <section
       id="achievements"
       className="relative w-full py-24 md:py-32 px-6 lg:px-16 overflow-hidden border-t border-white/[0.04]"
-      style={{ background: 'linear-gradient(180deg, #02000a 0%, #030016 55%, #02000d 100%)' }}
+      style={{ background: 'transparent' }}
     >
       {/* Custom keyframes */}
       <style>{`
@@ -697,23 +812,12 @@ export default function Achievements() {
         }
       `}</style>
 
-      {/* Dot-grid bg */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.18]" aria-hidden>
-        <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="ach-grid" width="72" height="72" patternUnits="userSpaceOnUse">
-              <circle cx="36" cy="36" r="1" fill="rgba(99,102,241,0.35)" />
-              <path d="M 72 0 L 0 0 0 72" fill="none" stroke="rgba(99,102,241,0.07)" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#ach-grid)" />
-        </svg>
-      </div>
-      {/* Ambient glows */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none z-0"
-           style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%)' }} />
-      <div className="absolute bottom-1/3 right-1/4 w-[380px] h-[380px] rounded-full pointer-events-none z-0"
-           style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.038) 0%, transparent 70%)' }} />
+      {/* Subtle section veil */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'linear-gradient(180deg, rgba(3,0,20,0.72) 0%, rgba(3,0,22,0.68) 55%, rgba(3,0,20,0.72) 100%)' }}
+        aria-hidden
+      />
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
 
@@ -743,8 +847,8 @@ export default function Achievements() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex gap-1 p-1 mb-10 rounded-xl border border-white/[0.06]
-                     bg-slate-950/60 backdrop-blur-md w-fit"
+          className="flex gap-1 p-1 mb-10 rounded-xl border border-indigo-500/15
+                     bg-slate-950/25 backdrop-blur-xl w-fit"
         >
           {TABS.map(tab => {
             const Icon = tab.icon
@@ -795,14 +899,7 @@ export default function Achievements() {
                 <Trophy size={12} />
                 SUB-PANEL A // CELESTIAL_HONORS_DECK &nbsp;·&nbsp; {CELESTIAL_HONORS.length} ACCOLADES
               </div>
-              <motion.div
-                initial="hidden" animate="visible" variants={listVariants}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-              >
-                {CELESTIAL_HONORS.map(item => (
-                  <HonorCard key={item.id} item={item} onClick={() => setSelectedHonor(item)} />
-                ))}
-              </motion.div>
+              <HonorCarousel onSelect={setSelectedHonor} />
             </motion.div>
           )}
 
@@ -823,8 +920,8 @@ export default function Achievements() {
                                 bg-indigo-950/10 backdrop-blur-sm font-mono text-xs text-slate-500">
                   <Terminal size={10} className="text-indigo-400/60" />
                   SATELLITE_ARCHIVE_TERMINAL v1.0
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse ml-1" />
-                  <span className="text-green-400/80">ONLINE</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse ml-1" />
+                  <span className="text-cyan-400/80">ONLINE</span>
                 </div>
               </div>
               <motion.div

@@ -112,23 +112,14 @@ export default function AboutMe() {
     <section
       id="about"
       className="relative w-full py-24 md:py-32 px-6 lg:px-12 flex flex-col justify-center overflow-hidden border-t border-white/[0.04]"
-      style={{
-        background: 'linear-gradient(180deg, #02000a 0%, #030014 50%, #020009 100%)'
-      }}
+      style={{ background: 'transparent' }}
     >
-      {/* Space Radar & Grid Decorative Underlay */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-20" aria-hidden="true">
-        <svg className="absolute w-full h-full text-indigo-500/[0.08]" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-indigo-500/10 border-dashed animate-[spin_120s_linear_infinite]" />
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-cyan-500/10 animate-[spin_85s_linear_infinite_reverse]" />
-      </div>
+      {/* Subtle section veil — keeps text legible over starfield */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'linear-gradient(180deg, rgba(3,0,20,0.72) 0%, rgba(3,0,20,0.68) 50%, rgba(3,0,20,0.72) 100%)' }}
+        aria-hidden="true"
+      />
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         {/* Header HUD Marker */}
@@ -200,12 +191,12 @@ export default function AboutMe() {
                     className="flex flex-col gap-6"
                   >
                     {/* Card 1: Full-Stack */}
-                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-cyan-500/20 transition-all duration-300">
+                    <div className="group relative p-5 rounded-xl border border-white/[0.06] bg-slate-950/20 backdrop-blur-md hover:bg-slate-950/30 hover:border-cyan-500/25 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
                       <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
                           Full-Stack Systems
                         </h3>
-                        <span className="text-xs font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-500/20 px-2 py-0.5 rounded">
+                        <span className="text-xs font-mono text-cyan-400 bg-cyan-950/30 border border-cyan-500/20 px-2 py-0.5 rounded">
                           ACTIVE
                         </span>
                       </div>
@@ -214,7 +205,7 @@ export default function AboutMe() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {['React.js', 'Spring Boot', 'MongoDB', 'Java', 'Tailwind CSS'].map(tag => (
-                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-slate-950/40 border border-indigo-500/10 px-2 py-0.5 rounded">
                             {tag}
                           </span>
                         ))}
@@ -222,7 +213,7 @@ export default function AboutMe() {
                     </div>
 
                     {/* Card 2: IoT & Cyber-Physical */}
-                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-indigo-500/20 transition-all duration-300">
+                    <div className="group relative p-5 rounded-xl border border-white/[0.06] bg-slate-950/20 backdrop-blur-md hover:bg-slate-950/30 hover:border-indigo-500/25 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
                           IoT &amp; Embedded Systems
@@ -236,7 +227,7 @@ export default function AboutMe() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {['ESP32', 'MQTT', 'WebSockets', 'Grafana', 'Arduino', 'C/C++'].map(tag => (
-                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-slate-950/40 border border-indigo-500/10 px-2 py-0.5 rounded">
                             {tag}
                           </span>
                         ))}
@@ -244,12 +235,12 @@ export default function AboutMe() {
                     </div>
 
                     {/* Card 3: AI & AR Spatial Computing */}
-                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.02] hover:border-purple-500/20 transition-all duration-300">
+                    <div className="group relative p-5 rounded-xl border border-white/[0.06] bg-slate-950/20 backdrop-blur-md hover:bg-slate-950/30 hover:border-purple-500/25 transition-all duration-300">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-base font-bold text-slate-100 uppercase tracking-wide">
                           AI &amp; Immersive Systems
                         </h3>
-                        <span className="text-xs font-mono text-purple-400 bg-purple-950/40 border border-purple-500/20 px-2 py-0.5 rounded">
+                        <span className="text-xs font-mono text-purple-400 bg-purple-950/30 border border-purple-500/20 px-2 py-0.5 rounded">
                           INTELLIGENCE
                         </span>
                       </div>
@@ -258,7 +249,7 @@ export default function AboutMe() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {['Federated Learning', 'Unity & C#', 'Unity Barracuda', 'TensorFlow Lite'].map(tag => (
-                          <span key={tag} className="text-xs font-mono text-slate-400 bg-[#070514] border border-white/[0.05] px-2 py-0.5 rounded">
+                          <span key={tag} className="text-xs font-mono text-slate-400 bg-slate-950/40 border border-purple-500/10 px-2 py-0.5 rounded">
                             {tag}
                           </span>
                         ))}
@@ -277,7 +268,7 @@ export default function AboutMe() {
                     className="flex flex-col gap-6"
                   >
                     {/* University of Kelaniya Card */}
-                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-[#050212]/80 hover:bg-[#07041a]/95 hover:border-cyan-500/30 transition-all duration-300 backdrop-blur-sm">
+                    <div className="group relative p-5 rounded-xl border border-white/[0.06] bg-slate-950/20 backdrop-blur-md hover:bg-slate-950/30 hover:border-cyan-500/30 transition-all duration-300">
                       <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-500/30 group-hover:scale-125 transition-transform duration-300" />
                       <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-500/30 group-hover:scale-125 transition-transform duration-300" />
 
@@ -359,16 +350,16 @@ export default function AboutMe() {
                     </div>
 
                     {/* Sacred Heart Convent Card */}
-                    <div className="group relative p-5 rounded-xl border border-white/[0.04] bg-[#050212]/80 hover:bg-[#07041a]/95 hover:border-indigo-500/30 transition-all duration-300 backdrop-blur-sm">
+                    <div className="group relative p-5 rounded-xl border border-white/[0.06] bg-slate-950/20 backdrop-blur-md hover:bg-slate-950/30 hover:border-indigo-500/30 transition-all duration-300">
                       <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-indigo-500/30 group-hover:scale-125 transition-transform duration-300" />
                       <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-indigo-500/30 group-hover:scale-125 transition-transform duration-300" />
 
                       <div className="flex flex-col sm:flex-row gap-4 items-start">
-                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-white/[0.08] bg-white flex items-center justify-center p-1 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-white/[0.08] bg-white flex items-center justify-center p-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                           <img
                             src={shcLogo}
                             alt="Sacred Heart Convent Logo"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex-1 w-full">
@@ -409,7 +400,15 @@ export default function AboutMe() {
                         period: "2024 - 2025",
                         color: "border-cyan-500/30",
                         iconColor: "text-cyan-400",
-                        detail: "Directed organization strategies, managed volunteer teams, and coordinated community animal welfare outreach programs."
+                        detail: "Directed organization strategies, managed executive committee, and coordinated community animal welfare outreach programs."
+                      },
+                      {
+                        role: "Vice President",
+                        org: "HUmane Society of University of Kelaniya",
+                        period: "2023 - 2024",
+                        color: "border-cyan-450/30",
+                        iconColor: "text-cyan-450",
+                        detail: "Directed HR subcommittee, managed volunteer teams."
                       },
                       {
                         role: "Secretary",
@@ -434,6 +433,14 @@ export default function AboutMe() {
                         color: "border-emerald-500/30",
                         iconColor: "text-emerald-400",
                         detail: "Negotiated strategic partnerships, managed brand sponsor pipelines, and facilitated business-to-academic integration."
+                      },
+                      {
+                        role: "Organising Committee Co-Chair",
+                        org: "ERA.AI 1.0, KelaniSTEAM — University of Kelaniya",
+                        period: "2023",
+                        color: "border-pink-500/30",
+                        iconColor: "text-pink-400",
+                        detail: "Planned the AI Art Generating Competition, lead the organizing committee, negotiated partnerships."
                       }
                     ].map((item, idx) => (
                       <div
@@ -473,7 +480,7 @@ export default function AboutMe() {
             className="lg:col-span-5 flex flex-col gap-5"
           >
             {/* ── Diagnostic Panel ── */}
-            <div className="relative flex-1 flex flex-col rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-md overflow-hidden p-6">
+            <div className="relative flex-1 flex flex-col rounded-2xl border border-indigo-500/15 bg-slate-950/20 backdrop-blur-md overflow-hidden p-6">
 
               {/* Decorative Corner Bracket Lines */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-indigo-500/40" />
@@ -484,8 +491,8 @@ export default function AboutMe() {
               {/* HUD Header */}
               <div className="flex justify-between items-center border-b border-white/[0.06] pb-4 mb-4 select-none font-mono text-[10px] tracking-wider text-slate-500">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-slate-300 font-semibold uppercase">SYSTEM DIAGNOSTIC PANEL</span>
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" style={{ boxShadow: '0 0 6px rgba(34,211,238,0.7)' }} />
+                  <span className="text-slate-300 font-semibold uppercase">STELLAR DIAGNOSTICS</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Terminal size={12} className="text-cyan-400" />
@@ -527,8 +534,8 @@ export default function AboutMe() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs font-semibold tracking-wider transition-all duration-300 ${
                         active
-                          ? 'bg-indigo-600/15 border-indigo-500/40 text-indigo-300 shadow-[0_0_12px_rgba(99,102,241,0.15)]'
-                          : 'bg-[#04010d]/50 border-white/[0.04] text-slate-400 hover:text-slate-200 hover:border-white/[0.08]'
+                          ? 'bg-indigo-600/15 border-indigo-500/35 text-indigo-300 shadow-[0_0_14px_rgba(99,102,241,0.2)] backdrop-blur-sm'
+                          : 'bg-slate-950/20 border-white/[0.04] text-slate-400 hover:text-slate-200 hover:border-indigo-500/20 backdrop-blur-sm'
                       }`}
                     >
                       <Icon size={14} className={active ? 'text-indigo-400' : 'text-slate-500'} />
@@ -539,7 +546,7 @@ export default function AboutMe() {
               </div>
 
               {/* Interactive Virtual Terminal Output */}
-              <div className="flex-1 min-h-[200px] rounded-xl border border-white/[0.05] bg-[#020006]/90 p-4 font-mono text-xs leading-relaxed select-text overflow-y-auto">
+              <div className="flex-1 min-h-[200px] rounded-xl border border-indigo-500/10 bg-slate-950/30 backdrop-blur-sm p-4 font-mono text-xs leading-relaxed select-text overflow-y-auto">
                 <div className="flex items-center justify-between border-b border-indigo-950/40 pb-2 mb-3 select-none text-[10px] text-indigo-400/80">
                   <span>TERMINAL_OUTPUT // {DIAGNOSTIC_DATA[activeTab].title}</span>
                   <span className="animate-pulse px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-300">
@@ -582,18 +589,18 @@ export default function AboutMe() {
 
                   {logIndex < DIAGNOSTIC_DATA[activeTab].logs.length ? (
                     <div className="text-cyan-400 animate-pulse flex items-center gap-1 select-none pl-4">
-                      <span className="w-1.5 h-3 bg-cyan-400 animate-[blink_0.8s_infinite]" />
-                      <span className="text-[10px] text-slate-500 font-mono tracking-widest">LOADING CORE_REGISTERS...</span>
+                      <span className="w-1.5 h-3 bg-indigo-400 animate-[blink_0.8s_infinite]" />
+                      <span className="text-[10px] text-slate-500 font-mono tracking-widest">LOADING STELLAR_REGISTERS...</span>
                     </div>
                   ) : (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-emerald-400 flex items-center gap-1 select-none pt-2"
+                      className="text-cyan-400 flex items-center gap-1 select-none pt-2"
                     >
-                      <span className="text-emerald-500 font-bold">&gt;</span>
+                      <span className="text-cyan-400 font-bold">&gt;</span>
                       <span className="font-semibold animate-[blink_1s_infinite]">█</span>
-                      <span className="text-[10px] text-slate-500 tracking-wider">SYSTEM READY. STANDBY FOR LINK_PING.</span>
+                      <span className="text-[10px] text-slate-500 tracking-wider">SYSTEM READY. STELLAR_LINK NOMINAL.</span>
                     </motion.div>
                   )}
                 </div>

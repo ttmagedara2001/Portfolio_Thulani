@@ -10,7 +10,7 @@ const MISSION_LOG = [
     organization: "Protonest IoT Pvt. Ltd",
     timeline: "6 Months // 2026 DEPLOYMENT",
     telemetry: "Designed and developed high-fidelity IoT ecosystems to accelerate client acquisition, focusing on seamless frontend interfaces and robust firmware testing.",
-    tech: ["React.js", "Tailwind CSS", "Figma", "ESP32", "MQTTX", "MQTT", "GitHub Actions", "Vercel", "Claude", "RAG", "Agentic Workflows"],
+    tech: ["React.js", "Tailwind CSS", "Figma", "ESP32", "MQTTX", "MQTT", "GitHub Actions", "Grafana","REST APIs","WebSockets","Vercel", "Claude", "RAG", "Agentic Workflows"],
     bullets: [
       { category: "Frontend & UI/UX", detail: "Architected responsive telemetry dashboard systems for three flagship applications (Plant, Factory, and Fleet Management) using React.js, Tailwind CSS, and Figma." },
       { category: "Firmware & Concurrency", detail: "Engineered ESP32 firmware for scalability testing and utilized MQTTX to validate core MQTT topic protocols." },

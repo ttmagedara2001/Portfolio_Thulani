@@ -478,43 +478,23 @@ export default function Contact() {
     <section
       id="contact"
       className="relative w-full py-24 md:py-32 px-6 lg:px-16 overflow-hidden border-t border-white/[0.04]"
-      style={{ background: 'linear-gradient(180deg, #02000d 0%, #030016 50%, #010008 100%)' }}
+      style={{ background: 'transparent' }}
     >
-      {/* ── Scanline scrolling background ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden>
-        <div className="absolute inset-0 opacity-[0.022]"
-             style={{
-               background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(99,102,241,0.6) 3px, rgba(99,102,241,0.6) 4px)',
-               backgroundSize: '100% 8px',
-               animation: 'scanlines 8s linear infinite',
-             }} />
-      </div>
+      {/* Subtle section veil */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(3,0,20,0.72) 0%, rgba(3,0,22,0.68) 50%, rgba(2,0,16,0.75) 100%)' }}
+        aria-hidden
+      />
 
-      {/* ── Dot grid ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-15" aria-hidden>
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="contact-grid" width="64" height="64" patternUnits="userSpaceOnUse">
-              <circle cx="32" cy="32" r="0.9" fill="rgba(99,102,241,0.4)" />
-              <path d="M 64 0 L 0 0 0 64" fill="none" stroke="rgba(99,102,241,0.06)" strokeWidth="0.4" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#contact-grid)" />
-        </svg>
-      </div>
+      {/* Ambient nebula glow accents */}
+      <div className="absolute top-0 left-1/3 w-[500px] h-[350px] rounded-full pointer-events-none z-0"
+           style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.06) 0%, transparent 70%)' }} />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] rounded-full pointer-events-none z-0"
+           style={{ background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)' }} />
 
-      {/* ── Ambient glows ── */}
-      <div className="absolute top-0 left-1/3 w-[600px] h-[400px] rounded-full pointer-events-none z-0"
-           style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.07) 0%, transparent 70%)' }} />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[350px] rounded-full pointer-events-none z-0"
-           style={{ background: 'radial-gradient(ellipse, rgba(34,211,238,0.045) 0%, transparent 70%)' }} />
-
-      {/* ── Custom keyframes ── */}
+      {/* Custom keyframes */}
       <style>{`
-        @keyframes scanlines {
-          0%   { background-position: 0 0; }
-          100% { background-position: 0 100px; }
-        }
         @keyframes comm-blink {
           0%, 49%  { opacity: 1; }
           50%, 100%{ opacity: 0; }
@@ -558,7 +538,7 @@ export default function Contact() {
           <motion.div variants={itemVariants} className="lg:col-span-5 flex flex-col gap-6">
 
             {/* Station header card */}
-            <div className="relative rounded-2xl border border-white/[0.06] bg-slate-950/40 backdrop-blur-md p-5 overflow-hidden">
+            <div className="relative rounded-2xl border border-indigo-500/15 bg-slate-950/20 backdrop-blur-md p-5 overflow-hidden">
               {/* Corner brackets */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400/40" />
               <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400/40" />
@@ -586,11 +566,11 @@ export default function Contact() {
               </div>
 
               {/* Coordinates row */}
-              <div className="relative z-10 grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[9px] text-slate-600 tracking-wider mb-5 border border-dashed border-white/[0.04] rounded-lg p-3 bg-[#02000a]/60">
-                <div><span className="text-slate-700">LAT:</span> <span className="text-indigo-400/70">6.9697° N</span></div>
-                <div><span className="text-slate-700">LON:</span> <span className="text-indigo-400/70">79.9149° E</span></div>
-                <div><span className="text-slate-700">FREQ:</span> <span className="text-cyan-400/70">9.42 GHz</span></div>
-                <div><span className="text-slate-700">NODE:</span> <span className="text-cyan-400/70">UOK_CORE</span></div>
+              <div className="relative z-10 grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[9px] text-slate-600 tracking-wider mb-5 border border-dashed border-indigo-500/15 rounded-lg p-3 bg-slate-950/30 backdrop-blur-sm">
+                <div><span className="text-slate-700">RA:</span> <span className="text-indigo-400/70">06h 45m</span></div>
+                <div><span className="text-slate-700">DEC:</span> <span className="text-indigo-400/70">+16° 43'</span></div>
+                <div><span className="text-slate-700">FREQ:</span> <span className="text-cyan-400/70">432 MHz</span></div>
+                <div><span className="text-slate-700">NODE:</span> <span className="text-cyan-400/70">UOK_ALPHA</span></div>
               </div>
 
               {/* Contact nodes */}
@@ -639,7 +619,7 @@ export default function Contact() {
 
           {/* ════ RIGHT — Transmission Terminal ════ */}
           <motion.div variants={itemVariants} className="lg:col-span-7">
-            <div className="relative rounded-2xl border border-indigo-500/18 bg-slate-900/30 backdrop-blur-md p-6 md:p-8 overflow-hidden">
+            <div className="relative rounded-2xl border border-indigo-500/15 bg-slate-950/20 backdrop-blur-md p-6 md:p-8 overflow-hidden">
 
               {/* Corner brackets — larger, indigo */}
               <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-indigo-400/35" />
