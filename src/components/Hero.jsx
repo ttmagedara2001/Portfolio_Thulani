@@ -212,7 +212,6 @@ function LaserTetherCanvas({ activeNode, nodeRefs }) {
 function StarChartRings() {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
-      {/* Concentric rings — faint, ethereal */}
       {[320, 240, 160, 90].map((r, i) => (
         <div
           key={r}
@@ -220,12 +219,12 @@ function StarChartRings() {
           style={{
             width:  r * 2,
             height: r * 2,
+            // On mobile, rings are already clipped by overflow-hidden so no extra scaling needed
             animation: `spin ${120 + i * 40}s linear infinite${i % 2 === 1 ? ' reverse' : ''}`,
             borderStyle: i === 1 ? 'dashed' : 'solid',
           }}
         />
       ))}
-      {/* Center reticle */}
       <div className="absolute w-16 h-16 rounded-full border border-indigo-400/15" />
       <div className="absolute w-3 h-3">
         <div className="absolute top-0 left-1/2 -translate-x-px w-px h-3 bg-indigo-400/30" />
@@ -273,11 +272,13 @@ export default function Hero() {
       {/* Static star-chart concentric rings */}
       <StarChartRings />
 
-      {/* Laser tether canvas */}
-      <LaserTetherCanvas activeNode={activeNode} nodeRefs={nodeRefs} />
+      {/* Laser tether canvas — desktop only */}
+      <div className="hidden lg:block">
+        <LaserTetherCanvas activeNode={activeNode} nodeRefs={nodeRefs} />
+      </div>
 
-      {/* Quadrant Alpha Star nodes */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      {/* Quadrant Alpha Star nodes — desktop only */}
+      <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none">
         {QUADRANT_DEFS.map(q => (
           <AlphaStarNode
             key={q.id}
@@ -291,36 +292,38 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Invisible hover zones — large hit areas matching each card quadrant */}
-      {QUADRANT_DEFS.map(q => (
-        <div
-          key={`zone-${q.id}`}
-          className="absolute w-[45vw] h-[45vh] pointer-events-auto cursor-crosshair"
-          style={{
-            top:    q.positionClass.includes('top')    ? 0 : undefined,
-            bottom: q.positionClass.includes('bottom') ? 0 : undefined,
-            left:   q.positionClass.includes('left')   ? 0 : undefined,
-            right:  q.positionClass.includes('right')  ? 0 : undefined,
-            zIndex: 8,
-          }}
-          onMouseEnter={() => setActiveNode(q.id)}
-          onMouseLeave={() => setActiveNode(null)}
-        />
-      ))}
+      {/* Invisible hover zones — desktop only */}
+      <div className="hidden lg:block">
+        {QUADRANT_DEFS.map(q => (
+          <div
+            key={`zone-${q.id}`}
+            className="absolute w-[45vw] h-[45vh] pointer-events-auto cursor-crosshair"
+            style={{
+              top:    q.positionClass.includes('top')    ? 0 : undefined,
+              bottom: q.positionClass.includes('bottom') ? 0 : undefined,
+              left:   q.positionClass.includes('left')   ? 0 : undefined,
+              right:  q.positionClass.includes('right')  ? 0 : undefined,
+              zIndex: 8,
+            }}
+            onMouseEnter={() => setActiveNode(q.id)}
+            onMouseLeave={() => setActiveNode(null)}
+          />
+        ))}
+      </div>
 
       {/* ── Central Typography ── */}
-      <div className="relative z-20 w-full max-w-xl px-6 py-12 flex flex-col items-center justify-center text-center pointer-events-none select-none">
+      <div className="relative z-20 w-full max-w-xl px-6 py-10 flex flex-col items-center justify-center text-center pointer-events-none select-none">
         <div className="pointer-events-auto flex flex-col items-center">
 
           {/* Section label */}
-          <div className="font-mono text-[10px] tracking-[0.4em] text-indigo-300/60 uppercase mb-5">
+          <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] text-indigo-300/60 uppercase mb-4">
             ✦ STELLAR_CHART_ACTIVE ✦
           </div>
 
           {/* Name — stellar mass glow */}
-          <div className="relative select-none mb-5">
+          <div className="relative select-none mb-4">
             <h1
-              className="relative text-5xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none font-sans"
+              className="relative text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase leading-none font-sans"
               style={{
                 filter: 'drop-shadow(0 0 30px rgba(99,102,241,0.4)) drop-shadow(0 0 60px rgba(99,102,241,0.15))',
               }}
@@ -330,8 +333,21 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* Active node telemetry */}
-          <div className="min-h-[44px] flex flex-col items-center justify-center text-center font-mono text-[10px] tracking-wider mt-2">
+          {/* Mobile role chips — shown below lg instead of quadrant cards */}
+          <div className="flex lg:hidden flex-wrap justify-center gap-2 mb-5 px-4">
+            {QUADRANT_DEFS.map(q => (
+              <span
+                key={q.id}
+                className="px-3 py-1.5 rounded-full font-mono text-[10px] tracking-wider uppercase
+                           border border-indigo-500/25 bg-indigo-950/30 text-indigo-300/80 backdrop-blur-sm"
+              >
+                {q.title}
+              </span>
+            ))}
+          </div>
+
+          {/* Active node telemetry — desktop only */}
+          <div className="hidden lg:flex min-h-[44px] flex-col items-center justify-center text-center font-mono text-[10px] tracking-wider mt-2">
             {activeNode ? (
               <div key={activeNode} className="flex flex-col items-center gap-1">
                 <span className="text-indigo-300 font-semibold tracking-widest">
@@ -350,12 +366,12 @@ export default function Hero() {
       </div>
 
       {/* ── CTA buttons ── */}
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-4 pointer-events-auto">
+      <div className="absolute bottom-14 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 flex flex-wrap items-center justify-center gap-3 pointer-events-auto px-6">
         <a
           href={cvFile}
           download="Thulani_Magedara_CV.pdf"
           id="hero-cta-cv"
-          className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
+          className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans"
           style={{
             background:  'linear-gradient(135deg, #4f46e5, #7c3aed)',
             boxShadow:   '0 4px 24px rgba(99,102,241,0.35)',
@@ -363,13 +379,13 @@ export default function Hero() {
           onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 32px rgba(99,102,241,0.55)' }}
           onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,102,241,0.35)' }}
         >
-          <Download size={16} />
+          <Download size={15} />
           Download CV
         </a>
         <button
           onClick={scrollToProjects}
           id="hero-cta-projects"
-          className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-slate-200 hover:text-white transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans backdrop-blur-md"
+          className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm text-slate-200 hover:text-white transition-all hover:scale-105 active:scale-95 cursor-pointer font-sans backdrop-blur-md"
           style={{
             border:     '1px solid rgba(99,102,241,0.2)',
             background: 'rgba(99,102,241,0.06)',

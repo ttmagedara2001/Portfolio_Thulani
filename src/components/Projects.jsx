@@ -3,6 +3,16 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import { Plus, Compass, ChevronLeft, ChevronRight, X, ExternalLink } from 'lucide-react'
 import { projects as PROJECT_CATALOG } from '../data/portfolioData'
 
+// ── Helper to resolve distinct labels for multiple demo endpoints ──────────
+function getDemoLabel(url, index) {
+  if (!url) return 'LIVE_DEMO'
+  const urlLower = url.toLowerCase()
+  if (urlLower.includes('pms') || urlLower.includes('plant')) return 'PLANT_DASHBOARD'
+  if (urlLower.includes('fms') || urlLower.includes('factory')) return 'FACTORY_DASHBOARD'
+  if (urlLower.includes('fleet')) return 'FLEET_DASHBOARD'
+  return `LIVE_DEMO_${index + 1}`
+}
+
 // ── GlitchText Component for Projects Digital Decrypt Effect ────────────────
 const GLITCH_CHARS = '01$#@%&?_+=*^[]<>█▓▒░▖▗▘▙▚▛▜▝▞▟'
 
@@ -287,21 +297,40 @@ function ProjectCard({ proj, idx, onMouseEnter, onMouseLeave, hoveredCardIndex, 
               <span className="text-indigo-400/80">{proj.tagline}</span>
             </div>
             
-            {/* Glowing GitHub Icon */}
-            <motion.a
-              href={proj.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              whileHover={{ scale: 1.1, rotate: 10, borderColor: 'rgba(34, 211, 238, 0.4)', boxShadow: '0 0 10px rgba(34, 211, 238, 0.3)' }}
-              whileTap={{ scale: 0.95 }}
-              className="p-1.5 rounded-md border border-white/[0.05] bg-[#020008]/40 text-slate-400 hover:text-cyan-400 transition-all duration-300"
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                <path d="M9 18c-4.51 2-5-2-7-2" />
-              </svg>
-            </motion.a>
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              {proj.github && (
+                <motion.a
+                  href={proj.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  whileHover={{ scale: 1.1, rotate: 10, borderColor: 'rgba(34, 211, 238, 0.4)', boxShadow: '0 0 10px rgba(34, 211, 238, 0.3)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-1.5 rounded-md border border-white/[0.05] bg-[#020008]/40 text-slate-400 hover:text-cyan-400 transition-all duration-300"
+                  title="View Source Code"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
+                </motion.a>
+              )}
+              {proj.demoUrl && (
+                <motion.a
+                  href={Array.isArray(proj.demoUrl) ? proj.demoUrl[0] : proj.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  whileHover={{ scale: 1.1, rotate: -10, borderColor: 'rgba(99, 102, 241, 0.4)', boxShadow: '0 0 10px rgba(99, 102, 241, 0.3)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-1.5 rounded-md border border-white/[0.05] bg-[#020008]/40 text-slate-400 hover:text-indigo-400 transition-all duration-300"
+                  title="Launch Live Demo"
+                >
+                  <ExternalLink size={14} />
+                </motion.a>
+              )}
+            </div>
           </div>
 
           {/* Subtitle / Company Badge */}
@@ -469,19 +498,52 @@ function ProjectDetailModal({ project, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-col sm:flex-row gap-4 border-t border-white/[0.05] pt-6 select-none font-mono text-xs">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-cyan-500/30 text-cyan-400 bg-cyan-950/10 hover:bg-cyan-950/30 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] active:scale-95 transition-all duration-300"
-          >
-            <ExternalLink size={14} />
-            <span>OPEN_PAYLOAD_REPOSITORY</span>
-          </a>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 border-t border-white/[0.05] pt-6 select-none font-mono text-xs">
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-grow flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-cyan-500/30 text-cyan-400 bg-cyan-950/10 hover:bg-cyan-950/30 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] active:scale-95 transition-all duration-300"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                <path d="M9 18c-4.51 2-5-2-7-2" />
+              </svg>
+              <span>OPEN_PAYLOAD_REPOSITORY</span>
+            </a>
+          )}
+
+          {project.demoUrl && (
+            Array.isArray(project.demoUrl) ? (
+              project.demoUrl.map((url, idx) => (
+                <a
+                  key={idx}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-grow flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-indigo-500/30 text-indigo-400 bg-indigo-950/10 hover:bg-indigo-950/30 hover:border-indigo-400/50 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] active:scale-95 transition-all duration-300"
+                >
+                  <ExternalLink size={14} />
+                  <span>{getDemoLabel(url, idx)}</span>
+                </a>
+              ))
+            ) : (
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-grow flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-indigo-500/30 text-indigo-400 bg-indigo-950/10 hover:bg-indigo-950/30 hover:border-indigo-400/50 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] active:scale-95 transition-all duration-300"
+              >
+                <ExternalLink size={14} />
+                <span>LAUNCH_ACTIVE_DEMO</span>
+              </a>
+            )
+          )}
+
           <button
             onClick={onClose}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-white/[0.05] text-slate-400 bg-slate-900/40 hover:bg-slate-900/60 hover:text-white transition-all duration-300 active:scale-95 cursor-pointer"
+            className="flex-grow flex items-center justify-center gap-2 py-3 px-6 rounded-lg border border-white/[0.05] text-slate-400 bg-slate-900/40 hover:bg-slate-900/60 hover:text-white transition-all duration-300 active:scale-95 cursor-pointer"
           >
             <span>TERMINATE_DIAGNOSTICS</span>
           </button>

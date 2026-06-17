@@ -321,7 +321,7 @@ function SlidePanel({ onClose, children }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-[120] flex items-center justify-center p-4 md:p-8 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/70 backdrop-blur-sm"
     >
       <motion.div
         initial={{ y: 40, opacity: 0, scale: 0.97 }}

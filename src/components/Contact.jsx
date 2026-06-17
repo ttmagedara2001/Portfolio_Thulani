@@ -477,7 +477,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative w-full py-24 md:py-32 px-6 lg:px-16 overflow-hidden border-t border-white/[0.04]"
+      className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-16 overflow-hidden border-t border-white/[0.04]"
       style={{ background: 'transparent' }}
     >
       {/* Subtle section veil */}
@@ -515,7 +515,7 @@ export default function Contact() {
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             SUB-SPACE_COMMS // 05
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans leading-none">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans leading-none">
             Contact{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500">
               Terminal

@@ -40,32 +40,25 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative w-full py-24 md:py-32 px-6 lg:px-12 flex flex-col justify-center overflow-hidden border-t border-white/[0.04]"
-      style={{
-        background: 'linear-gradient(180deg, #02000a 0%, #030014 50%, #020009 100%)'
-      }}
+      className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-12 flex flex-col justify-center overflow-hidden border-t border-white/[0.04]"
+      style={{ background: 'transparent' }}
     >
-      {/* Tactical radar coordinate grids overlays */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-20" aria-hidden="true">
-        <svg className="absolute w-full h-full text-indigo-500/[0.08]" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="experience-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#experience-grid)" />
-        </svg>
-      </div>
+      {/* Subtle section veil */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(3,0,20,0.72) 0%, rgba(3,0,22,0.68) 50%, rgba(2,0,16,0.75) 100%)' }}
+        aria-hidden
+      />
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         {/* Header HUD Descriptor */}
-        <div className="mb-20 md:mb-24 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-[0.4em] uppercase">
+        <div className="mb-16 md:mb-20 flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs sm:text-sm tracking-[0.4em] uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             MISSION_CHRONOLOGY // 02
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans">
-            Deployments & <br />
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans">
+            Deployments &{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500">
               Active Milestones
             </span>
@@ -137,9 +130,9 @@ export default function Experience() {
                     </div>
 
                     {/* Content Core Body */}
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+                    <div className="flex flex-col gap-6 mb-6">
                       {/* Internship photo panel */}
-                      <div className="shrink-0 w-full md:w-[200px] h-[140px] md:h-auto relative rounded-xl overflow-hidden border border-white/[0.06] bg-[#02000c]/80">
+                      <div className="w-full h-[180px] sm:h-[220px] relative rounded-xl overflow-hidden border border-white/[0.06] bg-[#02000c]/80">
                         <img
                           src={internshipImg}
                           alt="Protonest IoT Internship"
@@ -158,17 +151,25 @@ export default function Experience() {
                       </div>
 
                       <div className="flex-1">
-                        <h3 className="text-xl md:text-2xl font-black text-slate-100 tracking-wide uppercase leading-tight mb-1">
-                          {log.role}
-                        </h3>
+                        {/* Title + badge row */}
+                        <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
+                          <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-100 tracking-wide uppercase leading-tight">
+                            {log.role}
+                          </h3>
+                          {/* Calendar badge — always visible here on all sizes */}
+                          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.05] bg-[#020008]/40 font-mono text-[10px] text-indigo-300 shrink-0">
+                            <Calendar size={12} className="text-indigo-400" />
+                            <span>{log.timeline}</span>
+                          </div>
+                        </div>
                         <div className="text-sm font-mono text-cyan-400 uppercase tracking-widest mb-4">
                           {log.organization}
                         </div>
-                        <p className="text-sm md:text-base text-slate-400 leading-relaxed font-sans mb-6">
+                        <p className="text-sm text-slate-400 leading-relaxed font-sans mb-6">
                           {log.telemetry}
                         </p>
 
-                        {/* Telemetry Bullets Grid (Mainly Phase 04) */}
+                        {/* Telemetry Bullets Grid */}
                         {log.bullets.length > 0 && (
                           <div className="space-y-4 border-l border-white/[0.05] pl-4 mb-6">
                             {log.bullets.map((bullet, bIndex) => (
@@ -181,14 +182,6 @@ export default function Experience() {
                             ))}
                           </div>
                         )}
-                      </div>
-
-                      {/* Time Duration Badge Container */}
-                      <div className="shrink-0 flex items-start">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.05] bg-[#020008]/40 font-mono text-[10px] md:text-xs text-indigo-300">
-                          <Calendar size={12} className="text-indigo-400" />
-                          <span>{log.timeline}</span>
-                        </div>
                       </div>
                     </div>
 
