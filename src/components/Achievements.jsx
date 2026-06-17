@@ -1,14 +1,13 @@
 // ═══════════════════════════════════════════════════════════════════════════
 //  Achievements.jsx — Tab-switched HONOURS ↔ RESEARCH
-//  Cards: clean, no thumbnails; click → lightbox modal (like Projects)
-//  SDG modal: swipeable image gallery
+//  Large cards + full-screen slide panels with auto-swiping images
 // ═══════════════════════════════════════════════════════════════════════════
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Trophy, Medal, Award, Star, BookOpen, Terminal,
   ExternalLink, Download, Eye, GraduationCap,
-  X, ChevronLeft, ChevronRight, Images, ZoomIn
+  X, ChevronLeft, ChevronRight, Images
 } from 'lucide-react'
 
 // ── Local Asset Pipeline ──────────────────────────────────────────────────────
@@ -95,7 +94,7 @@ const CELESTIAL_HONORS = [
     assetPdf: deansListPdf,
     assetLabel: 'DOWNLOAD_DECK',
     assetAction: 'download',
-    tags: ['Academic Excellence', 'GPA 3.63', 'UOK'],
+    tags: ['Academic Excellence', 'GPA 3.55', 'UOK'],
   },
 ]
 
@@ -130,9 +129,9 @@ const RESEARCH_TELEMETRY = [
 //  TIER CONFIG
 // ═══════════════════════════════════════════════════════════════════════════
 const TIER = {
-  gold:   { border: 'rgba(251,191,36,0.4)',  glow: '0 20px 40px -12px rgba(251,191,36,0.22)',  badge: 'border-amber-500/30 bg-amber-500/10 text-amber-300',   label: 'GOLD_TIER',   hoverBorder: 'rgba(251,191,36,0.45)'   },
-  silver: { border: 'rgba(203,213,225,0.32)', glow: '0 20px 40px -12px rgba(203,213,225,0.15)', badge: 'border-slate-400/30 bg-slate-400/10 text-slate-300',   label: 'SILVER_TIER', hoverBorder: 'rgba(203,213,225,0.4)'  },
-  bronze: { border: 'rgba(194,65,12,0.3)',   glow: '0 20px 40px -12px rgba(194,65,12,0.16)',   badge: 'border-orange-700/30 bg-orange-700/10 text-orange-500', label: 'FINALIST',    hoverBorder: 'rgba(194,65,12,0.4)'    },
+  gold:   { border: 'rgba(251,191,36,0.4)',  glow: '0 20px 40px -12px rgba(251,191,36,0.22)',  badge: 'border-amber-500/30 bg-amber-500/10 text-amber-300',   label: 'GOLD_TIER',   hoverBorder: 'rgba(251,191,36,0.55)'   },
+  silver: { border: 'rgba(203,213,225,0.32)', glow: '0 20px 40px -12px rgba(203,213,225,0.15)', badge: 'border-slate-400/30 bg-slate-400/10 text-slate-300',   label: 'SILVER_TIER', hoverBorder: 'rgba(203,213,225,0.5)'  },
+  bronze: { border: 'rgba(194,65,12,0.3)',   glow: '0 20px 40px -12px rgba(194,65,12,0.16)',   badge: 'border-orange-700/30 bg-orange-700/10 text-orange-500', label: 'FINALIST',    hoverBorder: 'rgba(194,65,12,0.5)'    },
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -154,95 +153,134 @@ function ResolveIcon({ name, tier, size = 16 }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  MODAL IMAGE GALLERY (swipeable) — used inside both modals
+//  AUTO-SWIPING IMAGE GALLERY — full-width, prominent
 // ═══════════════════════════════════════════════════════════════════════════
-function ModalGallery({ images, alt }) {
-  const [idx, setIdx] = useState(0)
-  const total = images.length
+function AutoGallery({ images, alt, autoPlay = true }) {
+  const [idx, setIdx]         = useState(0)
+  const [paused, setPaused]   = useState(false)
+  const intervalRef           = useRef(null)
+  const total                 = images.length
+
+  // Auto-advance every 3s
+  useEffect(() => {
+    if (!autoPlay || total <= 1 || paused) return
+    intervalRef.current = setInterval(() => {
+      setIdx(i => (i + 1) % total)
+    }, 3000)
+    return () => clearInterval(intervalRef.current)
+  }, [autoPlay, total, paused, idx])
 
   // Keyboard navigation
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowLeft')  setIdx(i => (i - 1 + total) % total)
-      if (e.key === 'ArrowRight') setIdx(i => (i + 1) % total)
+      if (e.key === 'ArrowLeft')  { setIdx(i => (i - 1 + total) % total); setPaused(true) }
+      if (e.key === 'ArrowRight') { setIdx(i => (i + 1) % total);         setPaused(true) }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [total])
 
-  if (total === 0) return null
+  const prev = () => { setIdx(i => (i - 1 + total) % total); setPaused(true) }
+  const next = () => { setIdx(i => (i + 1) % total);         setPaused(true) }
+
+  if (total === 0) return (
+    <div className="w-full aspect-[16/9] rounded-2xl border border-amber-500/15 bg-amber-950/10 flex flex-col items-center justify-center gap-3">
+      <GraduationCap size={48} className="text-amber-400 drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]" />
+      <span className="font-mono text-xs text-amber-400/60 tracking-widest uppercase">Academic Record</span>
+    </div>
+  )
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden border border-white/[0.07] bg-[#02000c]/80 select-none">
-      {/* Main image */}
-      <div className="relative" style={{ paddingBottom: '58%' }}>
+    <div
+      className="relative w-full rounded-2xl overflow-hidden border border-white/[0.08] bg-[#02000c]/80 select-none"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Main image — fixed aspect ratio */}
+      <div className="relative" style={{ paddingBottom: '56%' }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.img
             key={idx}
             src={images[idx]}
-            alt={`${alt} — image ${idx + 1}`}
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            alt={`${alt} — ${idx + 1} of ${total}`}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
             className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
           />
         </AnimatePresence>
 
         {/* Scanline overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.06] z-10"
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04] z-10"
              style={{ background: 'linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 50%)', backgroundSize: '100% 3px' }} />
 
-        {/* Gradient veil at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#02000c]/80 to-transparent pointer-events-none z-10" />
+        {/* Bottom veil */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#02000c]/90 to-transparent pointer-events-none z-10" />
 
-        {/* Prev / Next — only show if multiple images */}
+        {/* Prev / Next */}
+        {total > 1 && (<>
+          <button onClick={prev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full
+                             bg-black/70 border border-white/20 flex items-center justify-center
+                             hover:bg-black/90 hover:border-cyan-400/50 hover:shadow-[0_0_12px_rgba(34,211,238,0.3)]
+                             transition-all duration-200 cursor-pointer backdrop-blur-sm">
+            <ChevronLeft size={18} className="text-white" />
+          </button>
+          <button onClick={next}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full
+                             bg-black/70 border border-white/20 flex items-center justify-center
+                             hover:bg-black/90 hover:border-cyan-400/50 hover:shadow-[0_0_12px_rgba(34,211,238,0.3)]
+                             transition-all duration-200 cursor-pointer backdrop-blur-sm">
+            <ChevronRight size={18} className="text-white" />
+          </button>
+        </>)}
+
+        {/* Counter chip */}
         {total > 1 && (
-          <>
-            <button onClick={() => setIdx(i => (i - 1 + total) % total)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full
-                               bg-black/60 border border-white/15 flex items-center justify-center
-                               hover:bg-black/85 hover:border-cyan-400/40 transition-all duration-200 cursor-pointer">
-              <ChevronLeft size={15} className="text-white" />
-            </button>
-            <button onClick={() => setIdx(i => (i + 1) % total)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full
-                               bg-black/60 border border-white/15 flex items-center justify-center
-                               hover:bg-black/85 hover:border-cyan-400/40 transition-all duration-200 cursor-pointer">
-              <ChevronRight size={15} className="text-white" />
-            </button>
-          </>
+          <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1
+                          rounded-full bg-black/70 border border-white/15 backdrop-blur-sm
+                          font-mono text-[10px] text-slate-300">
+            <Images size={10} />
+            {idx + 1} / {total}
+          </div>
         )}
 
-        {/* Slide counter */}
-        {total > 1 && (
-          <div className="absolute top-2 right-2 z-20 flex items-center gap-1 px-2 py-0.5 rounded
-                          bg-black/60 border border-white/10 font-mono text-[8px] text-slate-300">
-            <Images size={9} />
-            {idx + 1} / {total}
+        {/* Auto-play indicator */}
+        {total > 1 && !paused && (
+          <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 px-2.5 py-1
+                          rounded-full bg-black/70 border border-cyan-500/25 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="font-mono text-[8px] text-cyan-400/80 tracking-widest uppercase">AUTO</span>
           </div>
         )}
       </div>
 
-      {/* Dot indicators — only if multiple */}
+      {/* Progress bar */}
       {total > 1 && (
-        <div className="flex justify-center gap-1.5 py-2.5">
+        <div className="flex gap-1.5 px-4 py-3">
           {images.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-200 cursor-pointer
-                                ${i === idx ? 'bg-cyan-400 scale-125' : 'bg-white/25 hover:bg-white/45'}`} />
+            <button key={i} onClick={() => { setIdx(i); setPaused(true) }}
+                    className="flex-1 h-1 rounded-full overflow-hidden bg-white/10 cursor-pointer transition-all hover:bg-white/20">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${i === idx ? 'bg-cyan-400' : 'bg-transparent'}`}
+                style={{ width: i === idx ? '100%' : '0%' }}
+              />
+            </button>
           ))}
         </div>
       )}
 
-      {/* Thumbnail strip — only if multiple images */}
+      {/* Thumbnail strip */}
       {total > 1 && (
-        <div className="flex gap-1.5 px-3 pb-3 overflow-x-auto scrollbar-none">
+        <div className="flex gap-2 px-4 pb-4 overflow-x-auto scrollbar-none">
           {images.map((img, i) => (
-            <button key={i} onClick={() => setIdx(i)}
-                    className={`shrink-0 w-14 h-10 rounded-md overflow-hidden border transition-all duration-200 cursor-pointer
-                                ${i === idx ? 'border-cyan-400/70 shadow-[0_0_8px_rgba(34,211,238,0.3)]' : 'border-white/[0.07] opacity-50 hover:opacity-80'}`}>
+            <button key={i} onClick={() => { setIdx(i); setPaused(true) }}
+                    className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border transition-all duration-200 cursor-pointer
+                                ${i === idx
+                                  ? 'border-cyan-400/70 shadow-[0_0_10px_rgba(34,211,238,0.35)] scale-105'
+                                  : 'border-white/[0.07] opacity-50 hover:opacity-80 hover:border-white/20'}`}>
               <img src={img} alt={`thumb ${i+1}`} className="w-full h-full object-cover" draggable={false} />
             </button>
           ))}
@@ -253,11 +291,9 @@ function ModalGallery({ images, alt }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  HONOR DETAIL MODAL
+//  LARGE SLIDE PANEL — slides in from the right, full height
 // ═══════════════════════════════════════════════════════════════════════════
-function HonorModal({ item, onClose }) {
-  const t = TIER[item.tier] ?? TIER.bronze
-
+function SlidePanel({ onClose, children }) {
   // Close on Escape
   useEffect(() => {
     const onKey = e => { if (e.key === 'Escape') onClose() }
@@ -271,227 +307,171 @@ function HonorModal({ item, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-[120] flex items-center justify-center p-4 md:p-8
-                 bg-black/88 backdrop-blur-md overflow-y-auto"
+      className="fixed inset-0 z-[120] flex items-stretch justify-end bg-black/75 backdrop-blur-sm"
     >
-      {/* Laser sweep line */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-15 z-0">
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent absolute animate-[sweep-vertical_4s_linear_infinite]" />
+      <motion.div
+        initial={{ x: '100%', opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: '100%', opacity: 0 }}
+        transition={{ type: 'spring', damping: 30, stiffness: 220 }}
+        onClick={e => e.stopPropagation()}
+        className="relative w-full max-w-3xl h-full bg-[#040114]/98 border-l border-cyan-500/20
+                   shadow-[-20px_0_60px_rgba(6,182,212,0.12)] overflow-y-auto flex flex-col"
+      >
+        {/* Top neon accent line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent pointer-events-none z-10" />
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 z-20 w-10 h-10 rounded-xl border border-white/[0.08]
+                     bg-slate-900/60 text-slate-400 hover:text-cyan-400 hover:border-cyan-400/30
+                     flex items-center justify-center transition-all active:scale-95 cursor-pointer
+                     hover:shadow-[0_0_12px_rgba(34,211,238,0.2)] backdrop-blur-sm"
+        >
+          <X size={18} />
+        </button>
+
+        {children}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  HONOR DETAIL PANEL CONTENT
+// ═══════════════════════════════════════════════════════════════════════════
+function HonorPanelContent({ item }) {
+  const t = TIER[item.tier] ?? TIER.bronze
+
+  return (
+    <div className="flex flex-col gap-0 flex-1">
+      {/* Header */}
+      <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
+        <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase mb-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          ACCOLADE_{item.seq} // {item.authority}
+        </div>
+        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight font-sans leading-tight mb-3 pr-12">
+          {item.title}
+        </h3>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className={`font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full border ${t.badge}`}>
+            {t.label}
+          </span>
+          <span className="font-mono text-sm text-slate-400">{item.timeline}</span>
+        </div>
       </div>
 
-      <motion.div
-        initial={{ scale: 0.92, y: 28, opacity: 0 }}
-        animate={{ scale: 1, y: 0, opacity: 1 }}
-        exit={{ scale: 0.92, y: 28, opacity: 0 }}
-        transition={{ type: 'spring', damping: 24, stiffness: 180 }}
-        onClick={e => e.stopPropagation()}
-        className="relative w-full max-w-3xl bg-[#040114]/96 border border-cyan-500/22
-                   shadow-[0_0_55px_rgba(6,182,212,0.16)] rounded-2xl p-6 md:p-8
-                   backdrop-blur-xl z-10 flex flex-col gap-6"
-      >
-        {/* Tactical corner brackets */}
-        <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-cyan-400/50" />
-        <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-cyan-400/50" />
-        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-cyan-400/50" />
-        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-cyan-400/50" />
+      {/* Image gallery — large and prominent */}
+      <div className="px-8 py-6">
+        <AutoGallery images={item.images} alt={item.title} autoPlay={true} />
+      </div>
 
-        {/* Header */}
-        <div className="flex justify-between items-start gap-4 border-b border-white/[0.05] pb-5">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              ACCOLADE_{item.seq} // {item.authority}
-            </div>
-            <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tight font-sans leading-tight">
-              {item.title}
-            </h3>
-            <div className="flex items-center gap-2 flex-wrap mt-1">
-              <span className={`font-mono text-[8px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${t.badge}`}>
-                {t.label}
-              </span>
-              <span className="font-mono text-[9px] text-slate-500">{item.timeline}</span>
-            </div>
-          </div>
-          <button onClick={onClose}
-                  className="shrink-0 p-2 rounded-lg border border-white/[0.06] bg-slate-900/40
-                             text-slate-400 hover:text-cyan-400 hover:border-cyan-400/30
-                             transition-all active:scale-95 cursor-pointer">
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Image gallery */}
-        {item.images && item.images.length > 0 && (
-          <ModalGallery images={item.images} alt={item.title} />
-        )}
-
-        {/* No image placeholder for Dean's List */}
-        {(!item.images || item.images.length === 0) && (
-          <div className="w-full rounded-xl border border-amber-500/15 bg-amber-950/10 p-8 flex flex-col items-center gap-3">
-            <GraduationCap size={36} className="text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
-            <span className="font-mono text-[10px] text-amber-400/60 tracking-widest uppercase">Academic Record</span>
-          </div>
-        )}
-
-        {/* Telemetry body */}
-        <div className="border border-white/[0.04] bg-slate-950/40 rounded-xl p-4">
-          <div className="font-mono text-[9px] text-cyan-400/60 tracking-widest uppercase mb-2">
+      {/* Telemetry body */}
+      <div className="px-8 pb-6">
+        <div className="border border-white/[0.05] bg-slate-950/50 rounded-2xl p-5 mb-5">
+          <div className="font-mono text-[9px] text-cyan-400/60 tracking-widest uppercase mb-3">
             &gt; MISSION_TELEMETRY
           </div>
-          <p className="text-sm text-slate-300 font-sans leading-relaxed">{item.telemetry}</p>
+          <p className="text-base text-slate-300 font-sans leading-relaxed">{item.telemetry}</p>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2 mb-6">
           {item.tags.map(tag => (
-            <span key={tag} className="px-2 py-0.5 rounded border border-white/[0.06] bg-slate-900/60
-                                       text-slate-400 font-mono text-[8px] tracking-widest uppercase">
+            <span key={tag} className="px-3 py-1 rounded-full border border-white/[0.07] bg-slate-900/60
+                                       text-slate-300 font-mono text-xs tracking-widest uppercase">
               {tag}
             </span>
           ))}
         </div>
 
-        {/* Footer actions */}
-        <div className="flex flex-wrap gap-3 pt-2 border-t border-white/[0.05]">
+        {/* Actions */}
+        <div className="flex flex-wrap gap-3">
           {item.assetPdf && item.assetAction === 'view' && (
             <a href={item.assetPdf} target="_blank" rel="noopener noreferrer"
-               className="flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-lg border
-                          border-cyan-500/30 text-cyan-400 bg-cyan-950/10 hover:bg-cyan-950/28
-                          hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]
-                          font-mono text-[10px] tracking-widest uppercase transition-all duration-300 cursor-pointer">
-              <Eye size={14} />[ VIEW_VERIFICATION ]
+               className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl border
+                          border-cyan-500/35 text-cyan-400 bg-cyan-950/15 hover:bg-cyan-950/30
+                          hover:border-cyan-400/55 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]
+                          font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
+              <Eye size={15} />[ VIEW_VERIFICATION ]
             </a>
           )}
           {item.assetPdf && item.assetAction === 'download' && (
             <a href={item.assetPdf} download
-               className="flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-lg border
-                          border-amber-500/30 text-amber-400 bg-amber-950/10 hover:bg-amber-950/25
-                          hover:border-amber-400/50 hover:shadow-[0_0_15px_rgba(251,191,36,0.18)]
-                          font-mono text-[10px] tracking-widest uppercase transition-all duration-300 cursor-pointer">
-              <Download size={14} />[ DOWNLOAD_DECK ]
+               className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl border
+                          border-amber-500/35 text-amber-400 bg-amber-950/15 hover:bg-amber-950/28
+                          hover:border-amber-400/55 hover:shadow-[0_0_20px_rgba(251,191,36,0.22)]
+                          font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
+              <Download size={15} />[ DOWNLOAD_DECK ]
             </a>
           )}
-          <button onClick={onClose}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-lg border
-                             border-white/[0.05] text-slate-400 bg-slate-900/40 hover:bg-slate-900/60
-                             hover:text-white font-mono text-[10px] tracking-widest uppercase
-                             transition-all duration-300 cursor-pointer">
-            TERMINATE_DIAGNOSTICS
-          </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  PUBLICATION DETAIL MODAL
+//  PUBLICATION DETAIL PANEL CONTENT
 // ═══════════════════════════════════════════════════════════════════════════
-function PubModal({ item, onClose }) {
-  useEffect(() => {
-    const onKey = e => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
+function PubPanelContent({ item }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-      className="fixed inset-0 z-[120] flex items-center justify-center p-4 md:p-8
-                 bg-black/88 backdrop-blur-md overflow-y-auto"
-    >
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-15 z-0">
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-indigo-400 to-transparent absolute animate-[sweep-vertical_4s_linear_infinite]" />
+    <div className="flex flex-col gap-0 flex-1">
+      {/* Header */}
+      <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
+        <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-indigo-400 uppercase mb-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+          PEER_REVIEW_{item.seq} // {item.timeline}
+        </div>
+        <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight font-sans leading-snug mb-2 pr-12">
+          {item.title}
+        </h3>
+        <p className="font-mono text-xs text-indigo-400/60 tracking-wide">{item.venueFull}</p>
       </div>
 
-      <motion.div
-        initial={{ scale: 0.92, y: 28, opacity: 0 }}
-        animate={{ scale: 1, y: 0, opacity: 1 }}
-        exit={{ scale: 0.92, y: 28, opacity: 0 }}
-        transition={{ type: 'spring', damping: 24, stiffness: 180 }}
-        onClick={e => e.stopPropagation()}
-        className="relative w-full max-w-3xl bg-[#030016]/96 border border-indigo-500/22
-                   shadow-[0_0_55px_rgba(99,102,241,0.18)] rounded-2xl p-6 md:p-8
-                   backdrop-blur-xl z-10 flex flex-col gap-6"
-      >
-        {/* Tactical corner brackets — indigo */}
-        <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-indigo-400/50" />
-        <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-indigo-400/50" />
-        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-indigo-400/50" />
-        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-indigo-400/50" />
+      {/* Image gallery */}
+      <div className="px-8 py-6">
+        <AutoGallery images={item.images} alt={item.title} autoPlay={true} />
+      </div>
 
-        {/* Header */}
-        <div className="flex justify-between items-start gap-4 border-b border-white/[0.05] pb-5">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-indigo-400 uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              PEER_REVIEW_{item.seq} // {item.timeline}
-            </div>
-            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight font-sans leading-snug">
-              {item.title}
-            </h3>
-            <p className="font-mono text-[9px] text-indigo-400/60 tracking-wider mt-0.5">{item.venueFull}</p>
-          </div>
-          <button onClick={onClose}
-                  className="shrink-0 p-2 rounded-lg border border-white/[0.06] bg-slate-900/40
-                             text-slate-400 hover:text-indigo-400 hover:border-indigo-400/30
-                             transition-all active:scale-95 cursor-pointer">
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Image viewer */}
-        {item.images && item.images.length > 0 && (
-          <ModalGallery images={item.images} alt={item.title} />
-        )}
-
-        {/* Telemetry */}
-        <div className="border border-white/[0.04] bg-slate-950/40 rounded-xl p-4">
-          <div className="font-mono text-[9px] text-indigo-400/60 tracking-widest uppercase mb-2">
+      {/* Telemetry */}
+      <div className="px-8 pb-6">
+        <div className="border border-white/[0.05] bg-slate-950/50 rounded-2xl p-5 mb-5">
+          <div className="font-mono text-[9px] text-indigo-400/60 tracking-widest uppercase mb-3">
             &gt; RESEARCH_ABSTRACT
           </div>
-          <p className="text-sm text-slate-300 font-sans leading-relaxed">{item.telemetry}</p>
+          <p className="text-base text-slate-300 font-sans leading-relaxed">{item.telemetry}</p>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2 mb-6">
           {item.tags.map(tag => (
-            <span key={tag} className="px-2 py-0.5 rounded border border-indigo-500/20 bg-indigo-950/15
-                                       text-indigo-300 font-mono text-[8px] tracking-widest uppercase">
+            <span key={tag} className="px-3 py-1 rounded-full border border-indigo-500/22 bg-indigo-950/15
+                                       text-indigo-300 font-mono text-xs tracking-widest uppercase">
               {tag}
             </span>
           ))}
         </div>
 
-        {/* Footer */}
-        <div className="flex flex-wrap gap-3 pt-2 border-t border-white/[0.05]">
-          {item.link && (
-            <a href={item.link} target="_blank" rel="noopener noreferrer"
-               className="flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-lg border
-                          border-indigo-500/30 text-indigo-400 bg-indigo-950/10 hover:bg-indigo-950/25
-                          hover:border-indigo-400/50 hover:shadow-[0_0_15px_rgba(99,102,241,0.22)]
-                          font-mono text-[10px] tracking-widest uppercase transition-all duration-300 cursor-pointer">
-              <ExternalLink size={14} />[ ACCESS_ABSTRACT ]
-            </a>
-          )}
-          <button onClick={onClose}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-lg border
-                             border-white/[0.05] text-slate-400 bg-slate-900/40 hover:bg-slate-900/60
-                             hover:text-white font-mono text-[10px] tracking-widest uppercase
-                             transition-all duration-300 cursor-pointer">
-            TERMINATE_DIAGNOSTICS
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
+        {/* Action */}
+        {item.link && (
+          <a href={item.link} target="_blank" rel="noopener noreferrer"
+             className="flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl border
+                        border-indigo-500/35 text-indigo-400 bg-indigo-950/15 hover:bg-indigo-950/28
+                        hover:border-indigo-400/55 hover:shadow-[0_0_20px_rgba(99,102,241,0.25)]
+                        font-mono text-xs tracking-widest uppercase transition-all duration-300 cursor-pointer">
+            <ExternalLink size={15} />[ ACCESS_ABSTRACT ]
+          </a>
+        )}
+      </div>
+    </div>
   )
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  HONOR CARD — clean, no thumbnail, click → modal
+//  HONOR CARD — large card grid, no thumbnail preview on card itself
 // ═══════════════════════════════════════════════════════════════════════════
 const cardVariants = {
   hidden:  { opacity: 0, y: 24, scale: 0.97 },
@@ -503,68 +483,89 @@ function HonorCard({ item, onClick }) {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -7, borderColor: t.hoverBorder, boxShadow: t.glow }}
+      whileHover={{ y: -8, borderColor: t.hoverBorder, boxShadow: t.glow }}
       transition={{ type: 'spring', stiffness: 100, damping: 18 }}
       onClick={onClick}
-      className="group relative rounded-2xl border border-white/[0.06] bg-slate-950/55
-                 backdrop-blur-md overflow-hidden flex flex-col p-5 gap-4 cursor-pointer
-                 hover:bg-slate-950/70 transition-[background-color] duration-300"
+      className="group relative rounded-2xl border border-white/[0.07] bg-slate-950/60
+                 backdrop-blur-md overflow-hidden flex flex-col p-6 gap-5 cursor-pointer
+                 hover:bg-slate-950/75 transition-[background-color] duration-300 min-h-[280px]"
     >
       {/* Animated corner brackets */}
-      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-white/[0.07]
+      <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white/[0.08]
                       group-hover:border-cyan-400/55 group-hover:-translate-x-[2px] group-hover:-translate-y-[2px]
-                      transition-all duration-300 rounded-tl-sm pointer-events-none" />
-      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white/[0.08]
                       group-hover:border-cyan-400/55 group-hover:translate-x-[2px] group-hover:-translate-y-[2px]
-                      transition-all duration-300 rounded-tr-sm pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white/[0.08]
                       group-hover:border-cyan-400/55 group-hover:-translate-x-[2px] group-hover:translate-y-[2px]
-                      transition-all duration-300 rounded-bl-sm pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white/[0.08]
                       group-hover:border-cyan-400/55 group-hover:translate-x-[2px] group-hover:translate-y-[2px]
-                      transition-all duration-300 rounded-br-sm pointer-events-none" />
+                      transition-all duration-300 pointer-events-none" />
+
+      {/* Icon preview thumbnail (if images available) */}
+      {item.images && item.images.length > 0 && (
+        <div className="relative w-full h-40 rounded-xl overflow-hidden border border-white/[0.06]">
+          <img src={item.images[0]} alt={item.title}
+               className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+          {item.images.length > 1 && (
+            <div className="absolute bottom-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-full
+                            bg-black/70 border border-white/15 font-mono text-[9px] text-slate-300">
+              <Images size={9} />
+              {item.images.length} photos
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Dean's List placeholder when no images */}
+      {(!item.images || item.images.length === 0) && (
+        <div className="relative w-full h-40 rounded-xl border border-amber-500/15 bg-amber-950/10 flex flex-col items-center justify-center gap-2">
+          <GraduationCap size={36} className="text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
+          <span className="font-mono text-[9px] text-amber-400/60 tracking-widest uppercase">Academic Record</span>
+        </div>
+      )}
 
       {/* Top row: icon + tier badge */}
       <div className="flex items-start justify-between">
-        <div className="p-2.5 rounded-xl border border-white/[0.07] bg-slate-900/60
+        <div className="p-3 rounded-xl border border-white/[0.08] bg-slate-900/60
                         group-hover:border-cyan-400/25 group-hover:shadow-[0_0_12px_rgba(34,211,238,0.1)]
                         transition-all duration-300">
-          <ResolveIcon name={item.icon} tier={item.tier} size={20} />
+          <ResolveIcon name={item.icon} tier={item.tier} size={22} />
         </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <span className={`font-mono text-[7px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${t.badge}`}>
+        <div className="flex flex-col items-end gap-2">
+          <span className={`font-mono text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${t.badge}`}>
             {t.label}
           </span>
-          <span className="font-mono text-[9px] text-slate-500">{item.timeline}</span>
+          <span className="font-mono text-sm text-slate-400">{item.timeline}</span>
         </div>
       </div>
 
       {/* Content */}
       <div className="flex flex-col gap-2 flex-1">
-        <div className="font-mono text-[9px] text-cyan-500/65 tracking-widest uppercase truncate">
+        <div className="font-mono text-[10px] text-cyan-500/65 tracking-widest uppercase truncate">
           {item.authority}
         </div>
-        <h4 className="text-sm font-bold text-white leading-snug group-hover:text-cyan-200
+        <h4 className="text-base font-bold text-white leading-snug group-hover:text-cyan-200
                        transition-colors duration-300">
           {item.title}
         </h4>
-        <p className="text-[10px] text-slate-400 font-sans leading-relaxed line-clamp-3">
+        <p className="text-sm text-slate-400 font-sans leading-relaxed line-clamp-2">
           {item.telemetry}
         </p>
       </div>
 
-      {/* Footer: "View" cue + asset action */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/[0.04] mt-auto">
-        {/* View cue (always visible) */}
-        <div className="flex items-center gap-1.5 font-mono text-[8px] text-slate-600
+      {/* Footer cue */}
+      <div className="flex items-center justify-between pt-3 border-t border-white/[0.05] mt-auto">
+        <div className="flex items-center gap-2 font-mono text-[9px] text-slate-600
                         group-hover:text-cyan-400/70 transition-colors duration-300 tracking-widest uppercase">
-          <ZoomIn size={10} />
-          VIEW_RECORD
+          <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+          OPEN_FULL_RECORD
         </div>
-
-        {/* Asset shortcut */}
         {item.assetPdf && (
-          <span className={`font-mono text-[7px] uppercase tracking-widest flex items-center gap-1
+          <span className={`font-mono text-[8px] uppercase tracking-widest flex items-center gap-1
                             ${item.assetAction === 'view' ? 'text-cyan-500/60' : 'text-amber-500/60'}`}>
             {item.assetAction === 'view' ? <Eye size={9} /> : <Download size={9} />}
             {item.assetLabel}
@@ -576,77 +577,83 @@ function HonorCard({ item, onClick }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  PUBLICATION CARD — clean, click → modal
+//  PUBLICATION CARD — large, clean
 // ═══════════════════════════════════════════════════════════════════════════
 function PublicationCard({ item, onClick }) {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -7, borderColor: 'rgba(99,102,241,0.45)', boxShadow: '0 20px 40px -12px rgba(99,102,241,0.22)' }}
+      whileHover={{ y: -8, borderColor: 'rgba(99,102,241,0.5)', boxShadow: '0 20px 40px -12px rgba(99,102,241,0.25)' }}
       transition={{ type: 'spring', stiffness: 100, damping: 18 }}
       onClick={onClick}
-      className="group relative rounded-2xl border border-white/[0.06] bg-slate-950/55
-                 backdrop-blur-md overflow-hidden flex flex-col p-5 gap-4 cursor-pointer
-                 hover:bg-slate-950/70 transition-[background-color] duration-300"
+      className="group relative rounded-2xl border border-white/[0.07] bg-slate-950/60
+                 backdrop-blur-md overflow-hidden flex flex-col p-6 gap-5 cursor-pointer
+                 hover:bg-slate-950/75 transition-[background-color] duration-300 min-h-[280px]"
     >
       {/* Corner brackets */}
-      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-white/[0.07]
+      <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white/[0.08]
                       group-hover:border-indigo-400/55 group-hover:-translate-x-[2px] group-hover:-translate-y-[2px]
-                      transition-all duration-300 rounded-tl-sm pointer-events-none" />
-      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white/[0.08]
                       group-hover:border-indigo-400/55 group-hover:translate-x-[2px] group-hover:-translate-y-[2px]
-                      transition-all duration-300 rounded-tr-sm pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white/[0.08]
                       group-hover:border-indigo-400/55 group-hover:-translate-x-[2px] group-hover:translate-y-[2px]
-                      transition-all duration-300 rounded-bl-sm pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-white/[0.07]
+                      transition-all duration-300 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white/[0.08]
                       group-hover:border-indigo-400/55 group-hover:translate-x-[2px] group-hover:translate-y-[2px]
-                      transition-all duration-300 rounded-br-sm pointer-events-none" />
+                      transition-all duration-300 pointer-events-none" />
+
+      {/* Image preview */}
+      {item.images && item.images.length > 0 && (
+        <div className="relative w-full h-44 rounded-xl overflow-hidden border border-white/[0.06]">
+          <img src={item.images[0]} alt={item.title}
+               className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+          <div className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full
+                          bg-black/70 border border-indigo-500/25 font-mono text-[8px] text-indigo-300">
+            <Terminal size={8} />
+            RESEARCH
+          </div>
+        </div>
+      )}
 
       {/* Top row: icon + badge */}
       <div className="flex items-start justify-between">
-        <div className="p-2.5 rounded-xl border border-white/[0.07] bg-slate-900/60
+        <div className="p-3 rounded-xl border border-white/[0.08] bg-slate-900/60
                         group-hover:border-indigo-400/25 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.12)]
                         transition-all duration-300">
-          <Terminal size={18} className="text-indigo-400 drop-shadow-[0_0_6px_rgba(99,102,241,0.5)]" />
+          <Terminal size={20} className="text-indigo-400 drop-shadow-[0_0_6px_rgba(99,102,241,0.5)]" />
         </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <span className="font-mono text-[7px] uppercase tracking-widest px-2 py-0.5 rounded-full border
+        <div className="flex flex-col items-end gap-2">
+          <span className="font-mono text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full border
                            border-indigo-500/30 bg-indigo-500/10 text-indigo-300">
             ABSTRACT
           </span>
-          <span className="font-mono text-[9px] text-slate-500">{item.timeline}</span>
+          <span className="font-mono text-sm text-slate-400">{item.timeline}</span>
         </div>
       </div>
 
       {/* Content */}
       <div className="flex flex-col gap-2 flex-1">
-        <div className="font-mono text-[9px] text-indigo-400/65 tracking-widest uppercase truncate">
+        <div className="font-mono text-[10px] text-indigo-400/65 tracking-widest uppercase truncate">
           {item.outlet}
         </div>
-        <h4 className="text-sm font-bold text-white leading-snug group-hover:text-indigo-200
+        <h4 className="text-base font-bold text-white leading-snug group-hover:text-indigo-200
                        transition-colors duration-300 line-clamp-3">
           {item.title}
         </h4>
-        <p className="text-[10px] text-slate-400 font-sans leading-relaxed line-clamp-3">
+        <p className="text-sm text-slate-400 font-sans leading-relaxed line-clamp-2">
           {item.telemetry}
         </p>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/[0.04] mt-auto">
-        <div className="flex items-center gap-1.5 font-mono text-[8px] text-slate-600
+      <div className="flex items-center justify-between pt-3 border-t border-white/[0.05] mt-auto">
+        <div className="flex items-center gap-2 font-mono text-[9px] text-slate-600
                         group-hover:text-indigo-400/70 transition-colors duration-300 tracking-widest uppercase">
-          <ZoomIn size={10} />
-          VIEW_RESEARCH
-        </div>
-        <div className="flex gap-1">
-          {item.tags.slice(0, 2).map(tag => (
-            <span key={tag} className="px-1.5 py-0.5 rounded border border-white/[0.05] bg-slate-900/60
-                                       text-slate-600 font-mono text-[7px] tracking-wider uppercase">
-              {tag}
-            </span>
-          ))}
+          <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+          OPEN_RESEARCH_RECORD
         </div>
       </div>
     </motion.div>
@@ -665,7 +672,7 @@ const TABS = [
 //  MAIN EXPORT
 // ═══════════════════════════════════════════════════════════════════════════
 export default function Achievements() {
-  const [activeTab, setActiveTab]         = useState('honours')
+  const [activeTab,    setActiveTab]    = useState('honours')
   const [selectedHonor, setSelectedHonor] = useState(null)
   const [selectedPub,   setSelectedPub]   = useState(null)
 
@@ -691,7 +698,7 @@ export default function Achievements() {
       `}</style>
 
       {/* Dot-grid bg */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-18" aria-hidden>
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.18]" aria-hidden>
         <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="ach-grid" width="72" height="72" patternUnits="userSpaceOnUse">
@@ -718,14 +725,14 @@ export default function Achievements() {
           transition={{ duration: 0.55, ease: 'easeOut' }}
           className="mb-12 md:mb-14"
         >
-          <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-400 tracking-[0.4em] uppercase mb-4">
+          <div className="flex items-center gap-2 font-mono text-sm text-indigo-400 tracking-[0.4em] uppercase mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
             SYSTEMS_ACCOLADES // 04
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight font-sans leading-none">
+          <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tight font-sans leading-none">
             Achievements
           </h2>
-          <p className="mt-4 font-mono text-[11px] text-slate-500 tracking-widest">
+          <p className="mt-4 font-mono text-sm text-slate-500 tracking-widest">
             STELLAR_ARCHIVE: {CELESTIAL_HONORS.length} HONORS // {RESEARCH_TELEMETRY.length} PUBLICATIONS &nbsp;·&nbsp; CLICK CARD TO INSPECT
           </p>
         </motion.div>
@@ -747,7 +754,7 @@ export default function Achievements() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2 px-5 py-2.5 rounded-lg font-mono text-xs
+                className={`relative flex items-center gap-2.5 px-6 py-3 rounded-lg font-mono text-sm
                             tracking-widest uppercase transition-colors duration-200 cursor-pointer select-none
                             ${active ? (isCyan ? 'text-cyan-300' : 'text-indigo-300') : 'text-slate-500 hover:text-slate-300'}`}
               >
@@ -761,9 +768,9 @@ export default function Achievements() {
                     style={{ zIndex: 0 }}
                   />
                 )}
-                <Icon size={13} className="relative z-10" />
+                <Icon size={15} className="relative z-10" />
                 <span className="relative z-10">{tab.label}</span>
-                <span className={`relative z-10 px-1.5 py-0.5 rounded-full font-mono text-[9px]
+                <span className={`relative z-10 px-2 py-0.5 rounded-full font-mono text-xs
                                   ${active
                                     ? (isCyan ? 'bg-cyan-500/20 text-cyan-400' : 'bg-indigo-500/20 text-indigo-400')
                                     : 'bg-slate-800/60 text-slate-600'}`}>
@@ -784,13 +791,13 @@ export default function Achievements() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.28, ease: 'easeInOut' }}
             >
-              <div className="flex items-center gap-2 font-mono text-[10px] text-cyan-400/65 tracking-[0.3em] uppercase mb-6">
-                <Trophy size={11} />
+              <div className="flex items-center gap-2 font-mono text-xs text-cyan-400/65 tracking-[0.3em] uppercase mb-6">
+                <Trophy size={12} />
                 SUB-PANEL A // CELESTIAL_HONORS_DECK &nbsp;·&nbsp; {CELESTIAL_HONORS.length} ACCOLADES
               </div>
               <motion.div
                 initial="hidden" animate="visible" variants={listVariants}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {CELESTIAL_HONORS.map(item => (
                   <HonorCard key={item.id} item={item} onClick={() => setSelectedHonor(item)} />
@@ -808,15 +815,15 @@ export default function Achievements() {
               transition={{ duration: 0.28, ease: 'easeInOut' }}
             >
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                <div className="flex items-center gap-2 font-mono text-[10px] text-indigo-400/65 tracking-[0.3em] uppercase">
-                  <BookOpen size={11} />
+                <div className="flex items-center gap-2 font-mono text-xs text-indigo-400/65 tracking-[0.3em] uppercase">
+                  <BookOpen size={12} />
                   SUB-PANEL B // RESEARCH_TELEMETRY_DECK &nbsp;·&nbsp; {RESEARCH_TELEMETRY.length} TRANSMISSIONS
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-indigo-900/30
-                                bg-indigo-950/10 backdrop-blur-sm font-mono text-[8px] text-slate-500">
-                  <Terminal size={9} className="text-indigo-400/60" />
+                                bg-indigo-950/10 backdrop-blur-sm font-mono text-xs text-slate-500">
+                  <Terminal size={10} className="text-indigo-400/60" />
                   SATELLITE_ARCHIVE_TERMINAL v1.0
-                  <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse ml-1" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse ml-1" />
                   <span className="text-green-400/80">ONLINE</span>
                 </div>
               </div>
@@ -840,7 +847,7 @@ export default function Achievements() {
           transition={{ duration: 0.5, delay: 0.35 }}
           className="mt-14 pt-5 border-t border-white/[0.04] flex flex-wrap items-center justify-between gap-4"
         >
-          <div className="flex items-center gap-5 font-mono text-[9px] text-slate-600 tracking-widest uppercase">
+          <div className="flex items-center gap-5 font-mono text-xs text-slate-600 tracking-widest uppercase">
             <span className="flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-cyan-500/55 animate-pulse" />
               HONORS: {CELESTIAL_HONORS.length}
@@ -850,19 +857,23 @@ export default function Achievements() {
               RESEARCH: {RESEARCH_TELEMETRY.length}
             </span>
           </div>
-          <span className="font-mono text-[9px] text-slate-600 tracking-widest uppercase">
+          <span className="font-mono text-xs text-slate-600 tracking-widest uppercase">
             ASSET_PIPELINE: ACTIVE // SDG_CERT + DEANS_LIST
           </span>
         </motion.div>
       </div>
 
-      {/* ── Modals ── */}
+      {/* ── Slide panels ── */}
       <AnimatePresence>
         {selectedHonor && (
-          <HonorModal key="honor-modal" item={selectedHonor} onClose={() => setSelectedHonor(null)} />
+          <SlidePanel key="honor-panel" onClose={() => setSelectedHonor(null)}>
+            <HonorPanelContent item={selectedHonor} />
+          </SlidePanel>
         )}
         {selectedPub && (
-          <PubModal key="pub-modal" item={selectedPub} onClose={() => setSelectedPub(null)} />
+          <SlidePanel key="pub-panel" onClose={() => setSelectedPub(null)}>
+            <PubPanelContent item={selectedPub} />
+          </SlidePanel>
         )}
       </AnimatePresence>
     </section>
