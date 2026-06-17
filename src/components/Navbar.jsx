@@ -60,8 +60,10 @@ export default function Navbar() {
           {/* Logo */}
           <button
             onClick={() => scrollTo('hero')}
-            className="flex items-center gap-2 group"
+            className="font-semibold text-sm text-white/70 hover:text-white transition-colors tracking-wide font-mono uppercase"
           >
+            {profile.name.split(' ')[0]}&nbsp;
+            <span className="text-cyan-400">{profile.name.split(' ')[1]?.[0]}</span>
           </button>
 
           {/* Desktop links */}
