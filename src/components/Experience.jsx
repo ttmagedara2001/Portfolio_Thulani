@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Cpu, GraduationCap, Network, ShieldCheck, Plus, Calendar, Compass, Terminal } from 'lucide-react'
+import internshipImg from '../assets/internship/internship.jpeg'
 
 const MISSION_LOG = [
   {
@@ -137,6 +138,25 @@ export default function Experience() {
 
                     {/* Content Core Body */}
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+                      {/* Internship photo panel */}
+                      <div className="shrink-0 w-full md:w-[200px] h-[140px] md:h-auto relative rounded-xl overflow-hidden border border-white/[0.06] bg-[#02000c]/80">
+                        <img
+                          src={internshipImg}
+                          alt="Protonest IoT Internship"
+                          className="w-full h-full object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
+                        />
+                        {/* Scanline + gradient overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute inset-0 pointer-events-none opacity-[0.06]"
+                             style={{ background: 'linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 50%)', backgroundSize: '100% 3px' }} />
+                        {/* Label badge */}
+                        <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded
+                                        bg-black/60 border border-cyan-500/20 font-mono text-[8px] text-cyan-400/80 tracking-widest">
+                          <Terminal size={8} />
+                          FIELD_OPS
+                        </div>
+                      </div>
+
                       <div className="flex-1">
                         <h3 className="text-xl md:text-2xl font-black text-slate-100 tracking-wide uppercase leading-tight mb-1">
                           {log.role}
