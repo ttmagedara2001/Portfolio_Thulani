@@ -57,7 +57,7 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo - tm*/} 
           <button
             onClick={() => scrollTo('hero')}
             className="font-semibold text-sm text-white/70 hover:text-white transition-colors tracking-wide font-mono uppercase"
